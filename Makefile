@@ -74,5 +74,8 @@ production-dump.sql:
 deploy: prepare
 	@fab -u root -H instanc.es deploy
 
+recopy:
+	@fab -u root -H instanc.es recopy
+
 create-machine:
 	@fab -u root -H instanc.es create

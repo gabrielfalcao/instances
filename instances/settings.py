@@ -35,8 +35,8 @@ if DEBUG:  # localhost
 else:
     HOST = env.get("HOST")
     DOMAIN = env.get("DOMAIN")
-    GITHUB_CLIENT_ID = '491daa32a3fffba61846'
-    GITHUB_CLIENT_SECRET = '427e42629007fa7227bf1f23a48d216cda904d50'
+    GITHUB_CLIENT_ID = '5ea8d7815912f72daf71'
+    GITHUB_CLIENT_SECRET = '8cad784045aa0a99c687abc0da696bf16a3db0a6'
 
 
 SCHEMA = PORT == 443 and 'https://' or "http://"
@@ -53,3 +53,4 @@ GRAPHITE_URI = env.get_uri("GRAPHITE_URI", "http://ec2-23-22-195-36.compute-1.am
 GRAPHITE_SERVER_DOMAIN = GRAPHITE_URI.host
 AUTH_USER = env.get("AUTH_USER", "")
 AUTH_PASSWD = env.get("AUTH_PASSWD", "")
+absurl = lambda *path: "{0}{1}/{2}".format(SCHEMA, DOMAIN, "/".join(path).lstrip('/'))

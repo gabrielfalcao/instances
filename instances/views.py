@@ -31,6 +31,9 @@ github = GithubAuth(
     # request_token_params={'scope': 'user,user:email,user:follow,repo,repo:status'}
 )
 
+@mod.before_request
+def prepare():
+    g.user = None
 
 @github.access_token_getter
 def get_github_token(token=None):
@@ -74,7 +77,19 @@ def inject_basics():
 
 @mod.route("/")
 def index():
-    return render_template('index.html')
+    if 'github_user_data' in session:
+        return render_template('dashboard.html', github_user=session['github_user_data'])
+    else:
+        return render_template('index.html')
+
+
+@mod.route("/account")
+def show_settings():
+    if 'github_user_data' in session:
+        return render_template('account.html', github_user=session['github_user_data'])
+
+    return redirect(url_for('.index'))
+
 
 
 @mod.route("/500")

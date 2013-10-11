@@ -1,7 +1,7 @@
 {% extends "base.html" %}
           {% block navbar %}
           <li>
-            <a href="{{ url_for('.login') }}"><img src="{{ github_user.avatar_url }}" width="40" /> {{ github_user.login }}</a>
+            <a href="{{ url_for('.show_settings') }}"><img src="{{ github_user.avatar_url }}" width="40" /> {{ github_user.login }}</a>
           </li>
           {% endblock %}
 

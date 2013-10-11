@@ -73,3 +73,6 @@ production-dump.sql:
 
 deploy: prepare
 	@fab -u root -H instanc.es deploy
+
+create-machine:
+	@fab -u root -H instanc.es create

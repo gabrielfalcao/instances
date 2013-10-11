@@ -61,6 +61,10 @@ local-migrate-forward:
 	@[ "$(reset)" == "yes" ] && echo "drop database instances;create database instances" | mysql -uroot || echo "Running new migrations..."
 	@alembic upgrade head
 
+migrate-forward:
+	echo "Running new migrations..."
+	@alembic -c alembic.prod.ini upgrade head
+
 local-migrate-back:
 	@alembic downgrade -1
 

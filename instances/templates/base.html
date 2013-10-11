@@ -2,23 +2,53 @@
 <html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="Instances">
   <head>
     <meta charset="UTF-8">
-    <title>Instances</title>
+    <title>instanc.es - analytics for open source developers</title>
     <meta name="robots" content="noindex">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block csshead %}
-    <link href="{{ url_for('static', v=settings.RELEASE, filename='css/bootstrap.min.css') }}" rel="stylesheet" />
-    <link href="{{ url_for('static', v=settings.RELEASE, filename='css/modern-business.css') }}" rel="stylesheet" />
+    <link rel='stylesheet prefetch' href='https://s3-us-west-2.amazonaws.com/s.cdpn.io/18885/uikit.min.css'>
+    <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Montserrat:400,700'>
+    <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic'>
+    <link rel='stylesheet prefetch' href='//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css'>
+    <link href="{{ url_for('static', v=settings.RELEASE, filename='css/style.css') }}" rel="stylesheet" />
     {% endblock %}
     {% block jshead %}
-    <script type="text/javascript" src="{{ url_for('static', v=settings.RELEASE, filename='js/jquery-1.10.1.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', v=settings.RELEASE, filename='js/angular.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', v=settings.RELEASE, filename='js/socket.io.min.js') }}"></script>
+    <script src="js/prefixfree.min.js"></script>
     {% endblock %}
-    <script type="text/javascript" src="{{ url_for('static', v=settings.RELEASE, filename='js/index.js') }}"></script>
   </head>
   <body ng-controller="InstancesController" data-socketaddress="{{ settings.SCHEMA }}{{ settings.DOMAIN }}">
-    {% block main_content %}
-    {% endblock %}
-    <script type="text/javascript" src="{{ url_for('static', v=settings.RELEASE, filename='js/prefixfree.min.js') }}"></script>
+    <nav class="uk-navbar mm-navbar">
+      <a class="uk-navbar-brand" href="#">Instanc.es</a>
+      <div class="uk-navbar-flip">
+        <ul class="uk-navbar-nav">
+          <li>
+            <a href="{{ url_for('.login') }}"><i class="uk-icon-github-alt"></i> Sign in with Github</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    {% block main %}
+      {% endblock %}
+      <div class="uk-grid footer">
+        <div class="uk-container uk-container-center uk-text-center">
+	  <ul class="uk-subnav uk-subnav-line">
+	    <li><h1>Instanc.es</h1></li>
+	  </ul>
+	  <ul class="uk-subnav uk-subnav-line">
+	    <li><a href="http://github.com/gabrielfalcao">Github</a></li>
+	    <li><a href="http://twitter.com/gabrielfalcao">Twitter</a></li>
+	  </ul>
+	  <div class="uk-panel">
+	    <p>&copy; Copyright 2013 Instanc.es</p>
+	  </div>
+        </div>
+      </div>
+      <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-44784280-1', 'instanc.es');
+      ga('send', 'pageview');
+      </script>
   </body>
 </html>

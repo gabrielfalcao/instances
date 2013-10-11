@@ -1,0 +1,18 @@
+project:
+  name: "instances"
+  version: 0.0.44
+  description: Ebay Reader Dashboard
+
+  github_maintainer: Yipit
+  github_maintainer_name: Yipit
+  github_maintainer_url: http://github.com/Yipit
+  github_maintainer_gravatar: https://secure.gravatar.com/avatar/3fa0df5c54f5ac0f8652d992d7d24039?s=64
+
+  github_url: http://github.com/Yipit/instances
+  github_fork_url: https://github.com/Yipit/instances/archive/master.tar.gz
+  tarball_download_url: https://github.com/Yipit/instances/archive/master.tar.gz
+  zipball_download_url: https://github.com/Yipit/instances/archive/master.zip
+
+  full_index: false
+documentation:
+  index: README.md

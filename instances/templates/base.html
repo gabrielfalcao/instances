@@ -20,9 +20,11 @@
       <a class="uk-navbar-brand" href="#">Instanc.es</a>
       <div class="uk-navbar-flip">
         <ul class="uk-navbar-nav">
+          {% block navbar %}
           <li>
             <a href="{{ url_for('.login') }}"><i class="uk-icon-github-alt"></i> Sign in with Github</a>
           </li>
+          {% endblock %}
         </ul>
       </div>
     </nav>

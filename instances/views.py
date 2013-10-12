@@ -10,7 +10,7 @@ from instances import settings
 from instances.api import GithubUser, GithubEndpoint, GithubRepository
 from instances.handy.decorators import requires_login
 from instances.handy.functions import user_is_authenticated
-
+from redis import Redis
 from flaskext.github import GithubAuth
 
 mod = Blueprint('views', __name__)
@@ -91,6 +91,21 @@ def show_settings():
     return redirect(url_for('.index'))
 
 
+@mod.route("/bin/fork/<username>/<repository>.gif")
+def serve_fork_gif(username, repository):
+    data = {
+        'request': {
+            'remote_addr': request.remote_addr
+        }
+    }
+    string_data = json.dumps(data)
+    redis = Redis()
+
+    redis.rpush("list:forks:github:{0}/{1}".format(username, repository), string_data)
+    return json_response({
+        'username': username,
+        'repository': repository
+    })
 
 @mod.route("/500")
 def five00():

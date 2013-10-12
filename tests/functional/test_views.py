@@ -1,69 +1,50 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import json
-import httpretty
-from .base import user_test
-from instances.testing import Client
-from instances.models import Log
+from redis import Redis
+from instances.testing import app
+from sure import scenario
 
 
-# @httpretty.activate
-# @user_test
-# def test_anonymous_index(context):
-#     ("An anonymous user that goes to / should be redirected to the explore")
-
-#     http = Client()
-
-#     response = http.get("/")
-#     (response
-#      .should
-#      .have
-#      .property("location")
-#      .being
-#      .equal("http://localhost/explore"))
+def prepare_redis(context):
+    context.redis = Redis()
+    context.redis.flushall()
 
 
-# @httpretty.activate
-# @user_test
-# def test_authenticated_index(context):
-#     ("An authenticated user that goes to / should be redirected to his page")
+def prepare_app(context):
+    class LocalTestClient(object):
+        def __init__(self, app):
+            self.app = app
 
-#     http = Client()
-#     with http.session_transaction() as session:
-#         session['github_user_data'] = {
-#             'login': 'octocat',
-#         }
+        def __call__(self, environ, start_response):
+            environ['REMOTE_ADDR'] = environ.get('REMOTE_ADDR', '10.123.42.254')
+            return self.app(environ, start_response)
 
-#     response = http.get("/")
-#     (response
-#      .should
-#      .have
-#      .property("location")
-#      .being
-#      .equal("http://localhost/octocat"))
+    context.old_wsgi_app = app.web.wsgi_app
+    app.web.wsgi_app = LocalTestClient(app.web.wsgi_app)
+    context.client = lambda: app.web.test_client()
 
 
-# @httpretty.activate
-# @user_test
-# def test_logging(context):
-#     ("An anonymous user that goes to / should be redirected to the explore")
+def cleanup_app(context):
+    app.web.wsgi_app = context.old_wsgi_app
 
-#     http = Client()
 
-#     payload = json.dumps({
-#         'criteria': 'Attempt to search',
-#         'bookmark_id': 123,
-#         'project': 'foo/bar',
-#     })
-#     response = http.post("/search", data=payload, content_type="application/json")
 
-#     logs = Log.all()
+@scenario((prepare_redis, prepare_app), cleanup_app)
+def test_base_request_recorder_view(context):
+    ("A recording view should record the entire request data when requested")
+    # Given a http client
+    http = context.client()
 
-#     logs.should.have.length_of(1)
+    # When I get the response from HTTPretty
+    response = http.get("/bin/fork/gabrielfalcao/HTTPretty.gif")
+    response.status_code.should.equal(200)
 
-#     log = logs[0]
-
-#     log.message.should.equal("[SEARCH] 123: Attempt to search")
-#     log.data.should.equal(payload)
-
-#     response.data.should.equal(json.dumps({"found": 0}))
+    # Then the redis key for that project should have 1 item
+    context.redis.lrange("list:forks:github:gabrielfalcao/HTTPretty", 0, 1).should.equal([
+        json.dumps({'request': {'remote_addr': '10.123.42.254'}})
+    ])

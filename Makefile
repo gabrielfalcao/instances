@@ -35,8 +35,6 @@ release:
 	@./.release
 	@make publish
 
-deploy:
-	@fab -u ubuntu -H instances.yipit.com deploy
 
 publish:
 	@if [ -e "$$HOME/.pypirc" ]; then \
@@ -73,7 +71,6 @@ production-dump.sql:
 	@mysqldump -u gbookmarks --password='b00k@BABY' -h mysql.gabrielfalcao.com instances_io_prod > production-dump.sql
 	@echo "OK"
 	@echo "Saved at production-dump.sql"
-
 
 deploy: prepare
 	@fab -u root -H instanc.es deploy

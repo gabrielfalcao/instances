@@ -72,23 +72,53 @@ def github_callback(resp):
 def inject_basics():
     return dict(
         settings=settings,
+        github_user=session.get('github_user_data', None)
     )
 
 
 @mod.route("/")
 def index():
     if 'github_user_data' in session:
-        return render_template('dashboard.html', github_user=session['github_user_data'])
+        name = 'dashboard.html'
     else:
-        return render_template('index.html')
+        name = 'index.html'
+
+    return render_template(name)
 
 
 @mod.route("/account")
+@requires_login
 def show_settings():
-    if 'github_user_data' in session:
-        return render_template('account.html', github_user=session['github_user_data'])
+    return render_template('account.html')
 
-    return redirect(url_for('.index'))
+
+@mod.route("/dashboard")
+@requires_login
+def dashboard():
+    return render_template('dashboard.html')
+
+
+@mod.route("/subscribe", methods=["POST"])
+def subscribe():
+    email = request.form.get('email')
+
+    DONATOR_SET_KEYS = {
+        False: "set:pitch-subscribers",
+        True: "set:pitch-private-beta-donators"
+    }
+    if not email:
+        return error_json_response('missing email')
+
+    is_potential_donator = request.form.get('donator') == 'true'
+    data = {'email': email, 'donator': is_potential_donator}
+
+    key = DONATOR_SET_KEYS[is_potential_donator]
+    value = json.dumps(data)
+
+    redis = Redis()
+    redis.sadd(key, value)
+
+    return json_response({})
 
 
 @mod.route("/bin/fork/<username>/<repository>.gif")
@@ -98,14 +128,17 @@ def serve_fork_gif(username, repository):
             'remote_addr': request.remote_addr
         }
     }
-    string_data = json.dumps(data)
-    redis = Redis()
+    key = "list:forks:github:{0}/{1}".format(username, repository)
+    value = json.dumps(data)
 
-    redis.rpush("list:forks:github:{0}/{1}".format(username, repository), string_data)
+    redis = Redis()
+    redis.rpush(key, value)
+
     return json_response({
         'username': username,
         'repository': repository
     })
+
 
 @mod.route("/500")
 def five00():

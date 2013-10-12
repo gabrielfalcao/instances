@@ -40,7 +40,7 @@ def test_base_request_recorder_view(context):
     # Given a http client
     http = context.client()
 
-    # When I get the response from HTTPretty
+    # When I get the response for the project gabrielfalcao/HTTPretty
     response = http.get("/bin/fork/gabrielfalcao/HTTPretty.gif")
     response.status_code.should.equal(200)
 
@@ -48,3 +48,39 @@ def test_base_request_recorder_view(context):
     context.redis.lrange("list:forks:github:gabrielfalcao/HTTPretty", 0, 1).should.equal([
         json.dumps({'request': {'remote_addr': '10.123.42.254'}})
     ])
+
+
+@scenario((prepare_redis, prepare_app), cleanup_app)
+def test_save_email_interested(context):
+    ("A post to /subscribe with an email should record the person's email")
+    # Given a http client
+    http = context.client()
+
+    # When I post en email to /subscribe
+    response = http.post('/subscribe', data=dict(
+        email='foo@bar.com',
+    ))
+    response.status_code.should.equal(200)
+
+    # Then the redis key for that project should have 1 item
+    list(context.redis.smembers("set:pitch-subscribers")).should.equal([
+        json.dumps({'email': 'foo@bar.com', 'donator': False})])
+
+
+@scenario((prepare_redis, prepare_app), cleanup_app)
+def test_save_email_interested_private_beta(context):
+    ("A post to /subscribe with an email and donator=true should "
+     "record the person's email in a key for donators")
+    # Given a http client
+    http = context.client()
+
+    # When I post en email to /subscribe
+    response = http.post('/subscribe', data=dict(
+        email='foo@bar.com',
+        donator='true',
+    ))
+    response.status_code.should.equal(200)
+
+    # Then the redis key for that project should have 1 item
+    list(context.redis.smembers("set:pitch-private-beta-donators")).should.equal([
+        json.dumps({'email': 'foo@bar.com', 'donator': True})])

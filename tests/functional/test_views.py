@@ -41,7 +41,7 @@ def test_base_request_recorder_view(context):
     http = context.client()
 
     # When I get the response for the project gabrielfalcao/HTTPretty
-    response = http.get("/bin/fork/gabrielfalcao/HTTPretty.gif")
+    response = http.get("/bin/fork/gabrielfalcao/HTTPretty.js")
     response.status_code.should.equal(200)
 
     # Then the redis key for that project should have 1 item
@@ -60,27 +60,54 @@ def test_save_email_interested(context):
     response = http.post('/subscribe', data=dict(
         email='foo@bar.com',
     ))
-    response.status_code.should.equal(200)
+    response.status_code.should.equal(302)
+    response.headers.should.have.key('Location').being.equal('http://localhost/thank-you')
 
     # Then the redis key for that project should have 1 item
     list(context.redis.smembers("set:pitch-subscribers")).should.equal([
-        json.dumps({'email': 'foo@bar.com', 'donator': False})])
+        json.dumps({'email': 'foo@bar.com', 'donor': False})])
 
 
 @scenario((prepare_redis, prepare_app), cleanup_app)
 def test_save_email_interested_private_beta(context):
-    ("A post to /subscribe with an email and donator=true should "
-     "record the person's email in a key for donators")
+    ("A post to /subscribe with an email and donor=true should "
+     "record the person's email in a key for donors")
     # Given a http client
     http = context.client()
 
     # When I post en email to /subscribe
-    response = http.post('/subscribe', data=dict(
-        email='foo@bar.com',
-        donator='true',
-    ))
-    response.status_code.should.equal(200)
+    response = http.post('/subscribe', data={
+        'email': 'foo@bar.com',
+        'beta-please': 'true',
+    })
+    response.status_code.should.equal(302)
+    response.headers.should.have.key('Location').being.equal('http://localhost/thank-you')
 
     # Then the redis key for that project should have 1 item
-    list(context.redis.smembers("set:pitch-private-beta-donators")).should.equal([
-        json.dumps({'email': 'foo@bar.com', 'donator': True})])
+    list(context.redis.smembers("set:pitch-private-beta-donors")).should.equal([
+        json.dumps({'email': 'foo@bar.com', 'donor': True})])
+
+
+@scenario((prepare_redis, prepare_app), cleanup_app)
+def test_thank_you(context):
+    ("A going to to /subscribe with an email should record the person's email")
+    # Background: there are 3 people subscribed as donors
+    context.redis.sadd("set:pitch-private-beta-donors", "email1")
+    context.redis.sadd("set:pitch-private-beta-donors", "email2")
+    context.redis.sadd("set:pitch-private-beta-donors", "email3")
+
+    # Given a http client
+    http = context.client()
+
+    # And that the expected session keys are set
+    with http.session_transaction() as session:
+        session['subscription_email'] = 'foo@bar.com'
+        session['subscription_is_donor'] = True
+
+    # When I post en email to /thank-you
+    response = http.get('/thank-you')
+
+    # Then it should return 200
+    response.status_code.should.equal(200)
+    # And there should be 2 people in front of the last one in line
+    response.data.should.contain('There are 2 people in the line')

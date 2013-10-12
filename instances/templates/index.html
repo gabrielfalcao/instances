@@ -37,8 +37,11 @@
                 <p>Instanc.es is currently in private beta, you can leave your email and I'll let you know when it's ready for you to use.</p>
                 <p>For now I'm just experimenting with some technologies to make a really awesome product, so I can't afford too many users.</p>
                 <p>
-                  <form class="uk-form">
-		    <input type="text" placeholder="your@email.com">
+                  {% for message in messages %}
+                  <div class="uk-alert {{ message.alert_class }}">{{ message.text }}</div>
+                  {% endfor %}
+                  <form class="uk-form" action="{{ url_for(".subscribe") }}" method="POST">
+		    <input name="email" type="text" placeholder="your@email.com">
 		    <button class="uk-button" type="submit">Invite me</button>
                     <br />
                     <input type="checkbox" name="beta-please" />

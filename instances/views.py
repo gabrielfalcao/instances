@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import re
+import time
 import gevent
 import json
 from flask import (
@@ -34,6 +37,17 @@ github = GithubAuth(
 @mod.before_request
 def prepare():
     g.user = None
+
+def add_message(message, error=None):
+    if 'messages' not in session:
+        session['messages'] = []
+
+    session['messages'].append({
+        'text': message,
+        'time': time.time(),
+        'alert_class': error is None and 'uk-alert-success' or 'uk-alert-danger',
+        'error': error,
+    })
 
 @github.access_token_getter
 def get_github_token(token=None):
@@ -72,6 +86,7 @@ def github_callback(resp):
 def inject_basics():
     return dict(
         settings=settings,
+        messages=session.pop('messages', []),
         github_user=session.get('github_user_data', None)
     )
 
@@ -97,32 +112,63 @@ def show_settings():
 def dashboard():
     return render_template('dashboard.html')
 
+@mod.route("/thank-you")
+def thank_you():
+    if not ('subscription_email' in session and 'subscription_is_donor' in session):
+        return redirect('/')
+
+    redis = Redis()
+
+    email = session['subscription_email']
+    is_potential_donor = session['subscription_is_donor']
+
+    key = DONOR_SET_KEYS[is_potential_donor]
+    total_subscribers = redis.scard(key)
+
+    context = {
+        'subscription_email': email,
+        'total_subscribers': total_subscribers
+    }
+    return render_template('thank_you.html', **context)
+
+DONOR_SET_KEYS = {
+    False: "set:pitch-subscribers",
+    True: "set:pitch-private-beta-donors"
+}
 
 @mod.route("/subscribe", methods=["POST"])
 def subscribe():
     email = request.form.get('email')
 
-    DONATOR_SET_KEYS = {
-        False: "set:pitch-subscribers",
-        True: "set:pitch-private-beta-donators"
-    }
     if not email:
-        return error_json_response('missing email')
+        add_message("Please provide your email", error="Missing Info")
+        return redirect(url_for('.index'))
 
-    is_potential_donator = request.form.get('donator') == 'true'
-    data = {'email': email, 'donator': is_potential_donator}
+    is_potential_donor = request.form.get('beta-please') == 'true'
+    data = {'email': email, 'donor': is_potential_donor}
 
-    key = DONATOR_SET_KEYS[is_potential_donator]
+    key = DONOR_SET_KEYS[is_potential_donor]
     value = json.dumps(data)
 
     redis = Redis()
     redis.sadd(key, value)
 
-    return json_response({})
+    session['subscription_email'] = email
+    session['subscription_is_donor'] = is_potential_donor
+    return redirect(url_for(".thank_you"))
 
 
-@mod.route("/bin/fork/<username>/<repository>.gif")
-def serve_fork_gif(username, repository):
+@mod.route("/robots.txt")
+def robots_txt():
+    Disallow = lambda string: 'Disallow: {0}'.format(string)
+    return Response("User-agent: *\n{0}\n".format("\n".join([
+        Disallow('/bin/*'),
+        Disallow('/thank-you'),
+    ])))
+
+
+@mod.route("/bin/fork/<username>/<repository>.js")
+def serve_fork_js(username, repository):
     data = {
         'request': {
             'remote_addr': request.remote_addr

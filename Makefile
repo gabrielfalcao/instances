@@ -80,3 +80,6 @@ recopy:
 
 create-machine:
 	@fab -u root -H instanc.es create
+
+
+full-deploy: recopy deploy

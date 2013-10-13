@@ -1,16 +1,43 @@
 {% extends "base.html" %}
-          {% block navbar %}
-          <li>
-            <a href="{{ url_for('.show_settings') }}"><img src="{{ github_user.avatar_url }}" width="40" /> {{ github_user.login }}</a>
-          </li>
+{% block navbar %}
+<li>
+  <a href="{{ url_for('.show_settings') }}"><img src="{{ github_user.avatar_url }}" width="40" /> {{ github_user.login }}</a>
+</li>
           {% endblock %}
 
+{% block body_attributes %}ng-controller="DashboardController" data-socketaddress="{{ settings.SCHEMA }}{{ settings.DOMAIN }}" data-world-map-url="{{ url_for('.json_world_map_for_user', username=github_user.login) }}"{% endblock %}
+
 {% block main %}
-    <div class="main uk-grid">
-      <div class="uk-width-1-1 ">
-        <article class="uk-article uk-container uk-container-center">
-	  <h1 class="uk-article-title">{{ github_user.name }}'s Dashboard</h1>
-	</article>
-          </div>
+<div class="main uk-grid">
+  <div class="uk-width-1-1">
+    <article class="uk-article uk-container uk-container-center">
+      <h1 class="uk-article-title">{{ github_user.name }}'s Dashboard</h1>
+      <hr class="uk-article-separator" />
+      <div class="simple-map-d3-world-map" style="height: 600px"></div>
+
+      <hr class="uk-article-separator" />
+
+      <div class="uk-width-2-10">
+        <ul class="uk-nav uk-nav-parent-icon">
+	  <li class="uk-parent"><a href="">Repositories</a>
+	    <ul class="uk-nav-sub">
+            {% for repository in repositories %}
+              <li><a href="#">{{ repository.name }}</a>
+                {#<ul>
+                <li>Cool</li>
+                <li>Awesome</li>
+                </ul>#}
+              </li>
+            {% endfor %}
+	    </ul>
+	  </li>
+        </ul>
+    </article>
       </div>
+  </div>
+{% endblock %}
+
+{% block jsbottom %}
+  {% include "jsbottom.html" %}
+  <script src="{{ url_for('static', v=settings.RELEASE, filename='js/controllers.dashboard.js') }}"></script>
 {% endblock %}

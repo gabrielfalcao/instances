@@ -94,11 +94,9 @@ def inject_basics():
 @mod.route("/")
 def index():
     if 'github_user_data' in session:
-        name = 'dashboard.html'
-    else:
-        name = 'index.html'
+        return redirect(url_for('.dashboard'))
 
-    return render_template(name)
+    return render_template('index.html')
 
 
 @mod.route("/account")
@@ -110,7 +108,13 @@ def show_settings():
 @mod.route("/dashboard")
 @requires_login
 def dashboard():
-    return render_template('dashboard.html')
+    context = {
+        'repositories': [
+            {'name': 'lettuce'},
+            {'name': 'HTTPretty'},
+        ]
+    }
+    return render_template('dashboard.html', **context)
 
 @mod.route("/thank-you")
 def thank_you():
@@ -184,6 +188,13 @@ def serve_fork_js(username, repository):
         'username': username,
         'repository': repository
     })
+
+
+@mod.route("/bin/json/<username>")
+def json_world_map_for_user(username):
+    path = settings.LOCAL_FILE('world-population.geo.json')
+    with open(path) as fd:
+        return Response(fd.read(), content_type="text/json")
 
 
 @mod.route("/500")

@@ -9,13 +9,15 @@
     <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Montserrat:400,700'>
     <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic'>
     <link rel='stylesheet prefetch' href='//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css'>
+
+    <link href="{{ url_for('static', v=settings.RELEASE, filename='css/simple-map-d3.css') }}" rel="stylesheet" />
     <link href="{{ url_for('static', v=settings.RELEASE, filename='css/style.css') }}" rel="stylesheet" />
     {% endblock %}
     {% block jshead %}
-    <script src="js/prefixfree.min.js"></script>
+    <script src="{{ url_for('static', v=settings.RELEASE, filename='js/prefixfree.min.js') }}"></script>
     {% endblock %}
   </head>
-  <body ng-controller="InstancesController" data-socketaddress="{{ settings.SCHEMA }}{{ settings.DOMAIN }}">
+  <body {% block body_attributes %}{% endblock %}>
     <nav class="uk-navbar mm-navbar">
       <a class="uk-navbar-brand" href="#">Instanc.es</a>
       <div class="uk-navbar-flip">
@@ -53,5 +55,8 @@
       ga('create', 'UA-44784280-1', 'instanc.es');
       ga('send', 'pageview');
       </script>
+    {% block jsbottom %}
+      {% include "jsbottom.html" %}
+    {% endblock %}
   </body>
 </html>

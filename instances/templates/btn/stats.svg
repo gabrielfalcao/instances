@@ -100,7 +100,7 @@
 	</linearGradient>
 	<path id="path3678" fill="url(#path3678_1_)" d="M89.102,10.594v0.513c0.055-0.008,0.112-0.013,0.174-0.01
 		c0.242,0.018,0.43,0.111,0.578,0.208c0.217,0.159,0.451,0.311,0.715,0.45c0.342,0.184,0.735,0.349,1.173,0.464v-1.625H89.102z"/>
-	<title>Layer 1</title>
+	<title>Stats for {{ username }}/{{ project }}</title>
 </g>
 <text transform="matrix(1.0064 0 0 1 2.416 14.5399)" fill="#B3B3B3" font-family="'Montserrat-Bold'" font-size="14.1412">instanc.es</text>
 <text transform="matrix(1.0064 0 0 1 2.416 14.3078)" fill="#666666" font-family="'Montserrat-Bold'" font-size="14.1412">instanc.es</text>

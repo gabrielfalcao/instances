@@ -14,6 +14,7 @@ SOURCECODE_PATH = LOCAL_FILE('*')
 def create():
     run("apt-get -q=2 update")
     dependencies = [
+        'git-core',
         'python-pip',
         'supervisor',
         'python-dev',
@@ -36,6 +37,7 @@ def create():
 def recopy():
     release_path = '/srv/instances'
     put(LOCAL_FILE('.conf', 'ssh', 'id_rsa*'), "~/.ssh/")
+    run("chmod 600 ~/.ssh/id_rsa*")
     run("test -e {0} || git clone git@github.com:gabrielfalcao/instances.git {0}".format(release_path))
     run("cd /srv/instances && git pull")
     run("test -e /srv/venv || virtualenv --no-site-packages --clear /srv/venv")

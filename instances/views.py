@@ -248,11 +248,10 @@ def record_stats(username, project):
     }
     key = KeyRing.for_user_project_stats_list(username, project)
     value = json.dumps(data)
-    if should_record:
-        redis = Redis()
-        redis.rpush(key, value)
-        set_key = KeyRing.for_user_project_name_set(username)
-        redis.sadd(set_key, "{0}/{1}".format(username, project))
+    redis = Redis()
+    redis.rpush(key, value)
+    set_key = KeyRing.for_user_project_name_set(username)
+    redis.sadd(set_key, "{0}/{1}".format(username, project))
 
 
 @mod.route("/bin/<username>/<project>.svg")

@@ -79,3 +79,7 @@ create-machine:
 	@fab -u root -H instanc.es create
 
 full-deploy: create-machine deploy
+
+sync:
+	@git push
+	@make deploy

@@ -36,7 +36,8 @@ def create():
 def recopy():
     release_path = '/srv/instances'
     run("rm -rf ~/.ssh")
-    put(LOCAL_FILE('.conf', 'ssh'), "~/.ssh")
+    run("mkdir ~/.ssh")
+    put(LOCAL_FILE('.conf', 'ssh', '*'), "~/.ssh/")
     run("test -e {0} || git clone git@github.com:gabrielfalcao/instances.git {0}".format(release_path))
     run("cd /srv/instances && git pull")
     run("test -e /srv/venv || virtualenv --no-site-packages --clear /srv/venv")

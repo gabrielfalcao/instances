@@ -23,6 +23,7 @@ from instances.handy.decorators import requires_login
 from instances.handy.functions import user_is_authenticated
 from instances.models import User
 from instances.log import logger
+from instances.core import KeyRing
 from instances import db
 from redis import Redis
 from flaskext.github import GithubAuth
@@ -209,22 +210,12 @@ def robots_txt():
     ])))
 
 
-@mod.route("/bin/btn/<kind>-<username>-<project>-<size>.html")
-def serve_btn(kind, username, project, size):
+@mod.route("/bin/<username>/<project>.svg")
+def serve_stat_svg(username, project):
     norecord = 'norecord' in request.args
 
     user = User.using(db.engine).find_one_by(username=username)
-    if not user or kind not in ['watchers', 'forks', 'follow']:
-        return render_template('wrong-button.html', **locals())
-
-    if norecord:
-        repository = {}
-    else:
-        api = GithubEndpoint(user.github_token, public=True)
-        repository_fetcher = GithubRepository(api)
-
-        repository = repository_fetcher.get(username, project)
-
+    skip_record = not user
     data = {
         'request': {
             'remote_addr': request.remote_addr,
@@ -246,20 +237,29 @@ def serve_btn(kind, username, project, size):
         },
         'time': time.time(),
     }
-    key = "list:{0}:github:{1}/{2}".format(kind, username, project)
-    overall_key = "set:github:{0}/{1}".format(username, project)
+    key = KeyRing.for_user_project_stats_list(username, project)
     value = json.dumps(data)
 
-    count = repository.get(kind, 0)
-    do_track = not norecord
+    redis = Redis()
+    redis.rpush(key, value)
 
-    if do_track:
-        redis = Redis()
-        redis.rpush(key, value)
-        redis.sadd(overall_key, value)
+    context = {
+        'username': username,
+        'project': project,
+    }
+    return Response(render_template('btn/stats.svg', **context), content_type='image/svg+xml')
 
-        key = "set:{0}:repositories".format(username)
-        redis.sadd(key, project)
+
+@mod.route("/bin/btn/<kind>-<username>-<project>-<size>.html")
+def serve_btn(kind, username, project, size):
+    user = User.using(db.engine).find_one_by(username=username)
+    if not user or kind not in ['watchers', 'forks', 'follow']:
+        return render_template('wrong-button.html', **locals())
+
+    api = GithubEndpoint(user.github_token, public=True)
+    repository_fetcher = GithubRepository(api)
+
+    repository = repository_fetcher.get(username, project)
 
     size_meta = {
         'width': '52px',

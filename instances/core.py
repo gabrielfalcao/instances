@@ -49,3 +49,9 @@ class RepoInfo(object):
             project=self.project,
             url=self.remount()
         )
+
+
+class KeyRing(object):
+    @classmethod
+    def for_user_project_stats_list(cls, username, project, kind='stats'):
+        return "list:{kind}:github:{username}/{project}".format(**locals())

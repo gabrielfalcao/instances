@@ -49,7 +49,7 @@ publish:
 	fi
 
 run:
-	@PYTHONPATH=`pwd` ./instances/bin.py run
+	@PYTHONPATH=`pwd` gunicorn -w 8 -b 0.0.0.0:5000 instances.app:app.web
 
 check:
 	@PYTHONPATH=`pwd` ./instances/bin.py check
@@ -75,7 +75,7 @@ production-dump.sql:
 deploy: prepare
 	@fab -u root -H instanc.es deploy
 
-recopy:
+recopy: test
 	@fab -u root -H instanc.es recopy
 
 create-machine:

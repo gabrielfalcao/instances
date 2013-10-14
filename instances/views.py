@@ -14,6 +14,7 @@ from instances.api import GithubUser, GithubEndpoint, GithubRepository
 from instances.handy.decorators import requires_login
 from instances.handy.functions import user_is_authenticated
 from instances.models import User
+from instances.log import logger
 from instances import db
 from redis import Redis
 from flaskext.github import GithubAuth
@@ -62,14 +63,14 @@ def github_callback(resp):
     from instances.models import User
     next_url = request.args.get('next') or '/'
     if resp is None:
-        print (u'You denied the request to sign in.')
+        logger.error(u'You denied the request to sign in.')
         return redirect(next_url)
 
     error = resp.get('error')
 
     if error:
-        flash(error)
-        return json.dumps(error)
+        logger.error(u'Github error: %s', error)
+        return redirect(next_url)
 
     token = resp['access_token']
     session['github_token'] = token
@@ -204,21 +205,30 @@ def serve_btn(kind, username, project, size):
             'remote_user': request.remote_user,
             'referrer': request.referrer,
             'headers': dict(request.headers),
+            'args': dict(request.args),
             'form': dict(request.form),
             'data': request.data,
             'query_string': request.query_string,
+            'cookies': dict(request.cookies or {}),
+            'user_agent': {
+                'browser': request.user_agent.browser,
+                'platform': request.user_agent.platform,
+                'language': request.user_agent.language,
+                'string': request.user_agent.string,
+                'version': request.user_agent.version,
+            }
         }
     }
     key = "list:{2}:github:{0}/{1}".format(username, project, kind)
     value = json.dumps(data)
 
     count = repository.get(kind, 0)
-    if request.referrer and settings.HOST not in request.referrer:
-        redis = Redis()
-        redis.rpush(key, value)
 
-        key = "set:{0}:repositories".format(username)
-        redis.sadd(key, json.dumps(repository))
+    redis = Redis()
+    redis.rpush(key, value)
+
+    key = "set:{0}:repositories".format(username)
+    redis.sadd(key, json.dumps(repository))
 
     context = {
         'kind': kind,

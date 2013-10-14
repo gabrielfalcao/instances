@@ -8,6 +8,9 @@
 {% block body_attributes %}ng-controller="DashboardController" data-socketaddress="{{ settings.SCHEMA }}{{ settings.DOMAIN }}" data-world-map-url="{{ url_for('.json_world_map_for_user', username=github_user.login) }}"{% endblock %}
 
 {% block main %}
+<object id="socket-meta"
+        data-username="{{ github_user.login }}"></object>
+
 <div class="main uk-grid">
   <div class="uk-width-1-1">
     <article class="uk-article uk-container uk-container-center">
@@ -34,5 +37,5 @@
 
 {% block jsbottom %}
   {% include "jsbottom.html" %}
-<script src="{{ url_for('static', v=settings.RELEASE, filename='js/controllers.dashboard.js') }}"></script>
+  <script src="{{ url_for('static', v=settings.RELEASE, filename='js/controllers.dashboard.js') }}"></script>
 {% endblock %}

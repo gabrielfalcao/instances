@@ -120,33 +120,3 @@ class OrganizationUsers(Model):
 #   "created_at": "2008-01-14T04:33:35Z",
 #   "type": "Organization"
 # }
-class HttpCache(Model):
-    TIMEOUT = 10800
-    table = db.Table('md_http_cache', metadata,
-        db.Column('id', db.Integer, primary_key=True),
-        db.Column('url', db.Unicode(length=200), nullable=False),
-        db.Column('token', db.String(length=200), nullable=True),
-        db.Column('content', db.UnicodeText, nullable=True),
-        db.Column('headers', db.UnicodeText, nullable=True),
-        db.Column('status_code', db.Integer, nullable=True),
-        db.Column('updated_at', db.DateTime, default=now)
-    )
-
-    def to_cache_dict(self):
-        return {
-            'url': self.url,
-            'response_data': self.content,
-            'response_headers': ejson.loads(self.headers or "{}"),
-            'cached': True,
-            'status_code': self.status_code,
-        }
-
-class Log(Model):
-    table = db.Table('md_log', metadata,
-        db.Column('id', db.Integer, primary_key=True),
-        db.Column('level', db.Integer, nullable=True),
-        db.Column('user_id', db.Integer, nullable=True),
-        db.Column('message', db.UnicodeText, nullable=True),
-        db.Column('data', db.UnicodeText, nullable=True),
-        db.Column('created_at', db.DateTime, default=now),
-    )

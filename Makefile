@@ -72,7 +72,7 @@ production-dump.sql:
 	@echo "OK"
 	@echo "Saved at production-dump.sql"
 
-deploy: prepare
+deploy:
 	@fab -u root -H instanc.es recopy deploy
 
 create-machine:

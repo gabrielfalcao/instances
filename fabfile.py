@@ -52,5 +52,6 @@ def deploy():
     run("/srv/venv/bin/pip install -q -r /srv/instances/requirements.txt")
     put(LOCAL_FILE('.conf', 'supervisor.conf'), "/etc/supervisor/conf.d/instances.conf")
     run("service supervisor stop")
+    run("(ps aux | egrep gunicorn | grep -v grep | awk '{ print $2 }' | xargs kill -9 2>&1>/dev/null) 2>&1>/dev/null || printf '\033[1;32mGunicorn is down\033[0m'")
     run("(ps aux | egrep supervisord | grep -v grep | awk '{ print $2 }' | xargs kill -9 2>&1>/dev/null) 2>&1>/dev/null || printf '\033[1;32mSupervisor is down\033[0m'")
     run("service supervisor start")

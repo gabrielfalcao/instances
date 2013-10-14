@@ -136,11 +136,11 @@ def dashboard():
     key = "set:{login}:repositories".format(**session['github_user_data'])
 
     repositories = g.user.list_repositories()
-    tracked_repositories = map(json.loads, redis.smembers(key))
+    tracked_repositories = redis.smembers(key)
 
     def repository_is_being_tracked(repo):
         for possible in tracked_repositories:
-            if repo['full_name'] == possible['full_name']:
+            if repo['full_name'] == possible:
                 return True
 
         return False

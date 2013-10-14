@@ -110,6 +110,7 @@ def inject_basics():
         messages=session.pop('messages', []),
         github_user=session.get('github_user_data', None),
         json=json,
+        len=len,
         full_url_for=lambda *args, **kw: settings.absurl(url_for(*args, **kw))
     )
 
@@ -289,7 +290,7 @@ def serve_btn(kind, username, project, size):
         'text': TEXTS[kind],
         'href': HREFS[kind],
     }
-    return render_template('btn/btn.html', **context)
+    return render_template('btn/iframe.html', **context)
 
 
 @mod.route("/bin/json/<username>")

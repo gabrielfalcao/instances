@@ -9,6 +9,7 @@
     </tr>
   </thead>
   <tbody>
+    {% set username=github_user_data.login %}
     {% for repository in repositories %}
     <tr>
       <td>{{ repository.name }}</td>
@@ -24,8 +25,8 @@
             <h3>{{ kind.title() }}</h3>
             {% for size in ['small', 'large'] %}
               <p><strong>{{ size.title() }}</strong>
-                <iframe src="{{ full_url_for('.serve_btn', kind=kind, username=username, project=repository.name, size=small) }}" allowtransparency="true" frameborder="0" scrolling="0" width="62px" height="20px"></iframe>
-                <pre>{{ '<iframe src="' + full_url_for(".serve_btn", kind=kind, username=username, project=repository.name, size=small) + '" allowtransparency="true" frameborder="0" scrolling="0" width="62px" height="20px"></iframe>' }}</pre>
+                <iframe src="{{ full_url_for('.serve_btn', kind=kind, username=username, project=repository.name, size=size) }}" allowtransparency="true" frameborder="0" scrolling="0" width="62px" height="20px"></iframe>
+                <pre>{{ '<iframe src="' + full_url_for(".serve_btn", kind=kind, username=username, project=repository.name, size=size) + '" allowtransparency="true" frameborder="0" scrolling="0" width="62px" height="20px"></iframe>' }}</pre>
               </p>
             {% endfor %}
           {% endfor %}

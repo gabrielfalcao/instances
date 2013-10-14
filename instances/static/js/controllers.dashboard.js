@@ -18,7 +18,7 @@ $(function(){
         globeOn: true,
         legendOn: false,
         startManually: true
-    }).start();
+    });//.start();
 });
 
 APP.controller("DashboardController", function($scope){

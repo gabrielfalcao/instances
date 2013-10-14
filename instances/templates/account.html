@@ -1,16 +1,93 @@
 {% extends "base.html" %}
-          {% block navbar %}
-          <li>
-            <a href="{{ url_for('.show_settings') }}"><img src="{{ github_user.avatar_url }}" width="40" /> {{ github_user.login }}</a>
-          </li>
+{% block navbar %}
+<li>
+  <a href="{{ url_for('.show_settings') }}"><img src="{{ github_user.avatar_url }}" width="40" /> {{ github_user.login }}</a>
+</li>
           {% endblock %}
 
 {% block main %}
-    <div class="main uk-grid">
-      <div class="uk-width-1-1 ">
-        <article class="uk-article uk-container uk-container-center">
-	  <h1 class="uk-article-title">{{ github_user.name }}'s Account</h1>
-	</article>
+<div class="main uk-grid">
+  <div class="uk-width-1-1 ">
+    <article class="uk-article uk-container uk-container-center">
+      <h1 class="uk-article-title">{{ github_user.name }}'s Account</h1>
+
+
+      <ul class="uk-subnav uk-subnav-pill" data-uk-switcher="{connect:'#panes'}">
+        <li><a href="#personal-info"><i class="uk-icon-user">&nbsp;</i>Personal Information</a></li>
+        <li class="uk-active""><a href="#change-password"><i class="uk-icon-key">&nbsp;</i>Change Password</a></li>
+        <li><a href="#reset-password"><i class="uk-icon-refresh">&nbsp;</i>Password</a></li>
+        <li class="uk-disabled"><a href="#"><i class="uk-icon-dollar">&nbsp;</i>Billing information</a></li>
+      </ul>
+
+      <!-- This is the container of the content items -->
+      <ul id="panes" class="uk-switcher">
+        <li id="personal-info">
+          <div class="uk-width-1-2 uk-panel">
+            <dl class="uk-description-list uk-description-list-horizontal">
+            {% for key, value in github_user.items() %}
+              <dt>{{ key }}</dt>
+	      <dd><pre>{{ json.dumps(value, indent=2) }}</pre></dd>
+            {% endfor %}
+            </dl>
+
+            <p>
+            </p>
+
           </div>
-      </div>
+        </li>
+        <li id="change-password">
+          <div class="uk-width-1-2">
+            <br />
+            <form class="uk-form">
+	      <fieldset>
+	        <legend>Change your password</legend>
+	        <div class="uk-form-row">
+                  <p>
+                    <label for="password" class="uk-label">
+                  Current password: &nbsp;
+                      <input type="password" name="current-password" value="" />
+                    </label>
+
+                  </p>
+                </div>
+	        <div class="uk-form-row">
+                  <p>
+                    <label for="new-password" class="uk-label">
+                  New password: &nbsp;
+                      <input type="password" name="new-password" value="" />
+                    </label>
+
+                  </p>
+                </div>
+	        <div class="uk-form-row">
+                  <p>
+                    <label for="repeat-new-password" class="uk-label">
+                  Double-check new password: &nbsp;
+                      <input type="password" name="repeat-new-password" value="" />
+                    </label>
+
+                  </p>
+                </div>
+	      </fieldset>
+            </form>
+          </div>
+
+        </li>
+        <li>
+          <div class="uk-width-1-3">
+            <form class="uk-form">
+	      <fieldset>
+	        <legend>Reset password</legend>
+	        <div class="uk-form-row">
+                  <button class="uk-button" type="submit">Re-send by email</button>
+                  <button class="uk-button" type="submit">Re-send by sms</button>
+                </div>
+	      </fieldset>
+            </form>
+          </div>
+        </li>
+      </ul>
+    </article>
+  </div>
+</div>
 {% endblock %}

@@ -3,7 +3,7 @@
 <li>
   <a href="{{ url_for('.show_settings') }}"><img src="{{ github_user.avatar_url }}" width="40" /> {{ github_user.login }}</a>
 </li>
-          {% endblock %}
+{% endblock %}
 
 {% block body_attributes %}ng-controller="DashboardController" data-socketaddress="{{ settings.SCHEMA }}{{ settings.DOMAIN }}" data-world-map-url="{{ url_for('.json_world_map_for_user', username=github_user.login) }}"{% endblock %}
 
@@ -13,31 +13,26 @@
     <article class="uk-article uk-container uk-container-center">
       <h1 class="uk-article-title">{{ github_user.name }}'s Dashboard</h1>
       <hr class="uk-article-separator" />
-      <div class="simple-map-d3-world-map" style="height: 600px"></div>
+      <ul class="uk-subnav uk-subnav-pill" data-uk-switcher="{connect:'#panes'}">
+        <li class="uk-active""><a href="#list-repositories"><i class="uk-icon-list">&nbsp;</i>Repository list</a></li>
+        <li><a href="#graphs"><i class="uk-icon-graph">&nbsp;</i>Graphs</a></li>
+      </ul>
 
-      <hr class="uk-article-separator" />
-
-      <div class="uk-width-2-10">
-        <ul class="uk-nav uk-nav-parent-icon">
-	  <li class="uk-parent"><a href="">Repositories</a>
-	    <ul class="uk-nav-sub">
-            {% for repository in repositories %}
-              <li><a href="#">{{ repository.name }}</a>
-                {#<ul>
-                <li>Cool</li>
-                <li>Awesome</li>
-                </ul>#}
-              </li>
-            {% endfor %}
-	    </ul>
-	  </li>
-        </ul>
+      <!-- This is the container of the content items -->
+      <ul id="panes" class="uk-switcher">
+        <li id="list-repositories">
+          {% include "./dashboard/list-repositories.html" %}
+        </li {#id="list-repositories"#}>
+        <li id="graphs">
+          {% include "./dashboard/graphs.html" %}
+        </li {#id="graphs"#}>
+      </ul>
     </article>
-      </div>
   </div>
+</div>
 {% endblock %}
 
 {% block jsbottom %}
   {% include "jsbottom.html" %}
-  <script src="{{ url_for('static', v=settings.RELEASE, filename='js/controllers.dashboard.js') }}"></script>
+<script src="{{ url_for('static', v=settings.RELEASE, filename='js/controllers.dashboard.js') }}"></script>
 {% endblock %}

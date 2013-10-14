@@ -13,6 +13,8 @@ from instances import settings
 from instances.api import GithubUser, GithubEndpoint, GithubRepository
 from instances.handy.decorators import requires_login
 from instances.handy.functions import user_is_authenticated
+from instances.models import User
+from instances import db
 from redis import Redis
 from flaskext.github import GithubAuth
 
@@ -72,7 +74,7 @@ def github_callback(resp):
     token = resp['access_token']
     session['github_token'] = token
 
-    github_user_data = GithubUser.fetch_info(token)
+    github_user_data = GithubUser.fetch_info(token, skip_cache=True)
 
     github_user_data['github_token'] = token
 
@@ -87,7 +89,9 @@ def inject_basics():
     return dict(
         settings=settings,
         messages=session.pop('messages', []),
-        github_user=session.get('github_user_data', None)
+        github_user=session.get('github_user_data', None),
+        json=json,
+        full_url_for=lambda *args, **kw: settings.absurl(url_for(*args, **kw))
     )
 
 
@@ -108,11 +112,23 @@ def show_settings():
 @mod.route("/dashboard")
 @requires_login
 def dashboard():
+    redis = Redis()
+    key = "set:{login}:repositories".format(**session['github_user_data'])
+
+    repositories = g.user.list_repositories()
+    tracked_repositories = map(json.loads, redis.smembers(key))
+
+    def repository_is_being_tracked(repo):
+        for possible in tracked_repositories:
+            if repo['full_name'] == possible['full_name']:
+                return True
+
+        return False
+
     context = {
-        'repositories': [
-            {'name': 'lettuce'},
-            {'name': 'HTTPretty'},
-        ]
+        'tracked_repositories': tracked_repositories,
+        'repositories': repositories,
+        'repository_is_being_tracked': repository_is_being_tracked
     }
     return render_template('dashboard.html', **context)
 
@@ -171,23 +187,47 @@ def robots_txt():
     ])))
 
 
-@mod.route("/bin/fork/<username>/<repository>.js")
-def serve_fork_js(username, repository):
+@mod.route("/bin/btn/<kind>-<username>-<project>-<size>.html")
+def serve_btn(kind, username, project, size):
+    user = User.using(db.engine).find_one_by(username=username)
+    if not user or kind not in ['watchers', 'forks', 'follow']:
+        return render_template('wrong-button.html', **locals())
+
+    api = GithubEndpoint(user.github_token, public=True)
+    repository_fetcher = GithubRepository(api)
+
+    repository = repository_fetcher.get(username, project)
+
     data = {
         'request': {
-            'remote_addr': request.remote_addr
+            'remote_addr': request.remote_addr,
+            'remote_user': request.remote_user,
+            'referrer': request.referrer,
+            'headers': dict(request.headers),
+            'form': dict(request.form),
+            'data': request.data,
+            'query_string': request.query_string,
         }
     }
-    key = "list:forks:github:{0}/{1}".format(username, repository)
+    key = "list:{2}:github:{0}/{1}".format(username, project, kind)
     value = json.dumps(data)
+
+    count = repository.get(kind, 0)
 
     redis = Redis()
     redis.rpush(key, value)
 
-    return json_response({
+    key = "set:{0}:repositories".format(username)
+    redis.sadd(key, json.dumps(repository))
+
+    context = {
+        'kind': kind,
         'username': username,
-        'repository': repository
-    })
+        'repository': repository,
+        'count': count,
+        'size': size,
+    }
+    return render_template('github-btn.html', **context)
 
 
 @mod.route("/bin/json/<username>")

@@ -101,13 +101,19 @@ class GithubEndpoint(object):
             'status_code': response.status_code,
         }
 
-    def retrieve(self, path, data=None):
+    def retrieve(self, path, data=None, skip_cache=False):
         headers = self.headers
-        response = self.get_from_cache(path, headers, data)
+        if skip_cache:
+            response = None
+        else:
+            response = self.get_from_cache(path, headers, data)
+
         if not response:
             response = self.get_from_web(path, headers, data)
             response_data = response['response_data'].decode('utf-8')
-            cached = self.get_or_create_cache_object(response['url'], response_data)
+
+            cached = self.get_or_create_cache_object(
+                response['url'], response_data)
             cached.content = response_data
             cached.headers = ejson.dumps(response['response_headers'])
             cached.status_code = response['status_code']
@@ -138,12 +144,15 @@ class Resource(object):
 
 class GithubUser(Resource):
     @classmethod
-    def fetch_info(cls, token):
+    def fetch_info(cls, token, skip_cache=False):
         instance = cls.from_token(token)
-        return instance.endpoint.retrieve('/user')
+        return instance.endpoint.retrieve('/user', skip_cache=skip_cache)
 
     def get_starred(self, username):
         return self.endpoint.retrieve('/users/{0}/starred'.format(username))
+
+    def get_repositories(self, username):
+        return self.endpoint.retrieve('/users/{0}/repos?sort=pushed'.format(username))
 
 
 class GithubRepository(Resource):

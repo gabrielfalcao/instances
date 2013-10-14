@@ -54,3 +54,28 @@ GRAPHITE_SERVER_DOMAIN = GRAPHITE_URI.host
 AUTH_USER = env.get("AUTH_USER", "")
 AUTH_PASSWD = env.get("AUTH_PASSWD", "")
 absurl = lambda *path: "{0}{1}/{2}".format(SCHEMA, DOMAIN, "/".join(path).lstrip('/'))
+BETA_USERS = [
+    'gabrielfalcao',
+    'heynemann',
+    'vsanta',
+    'felipesilva',
+    'clarete',
+    'vacanti',
+    'spulec',
+    'adamn',
+    'zmsmith',
+    'nityaoberoi',
+    'xie1989',
+    'fabiomcosta',
+    'suneel0101',
+    'Bpless',
+    'Mingweigu',
+    'talsafran',
+    'andrewgross',
+    'rumela',
+    'ajyang818',
+    'lgroetzi',
+    'mattRaoul',
+    'hltbra',
+    'farnja',
+]

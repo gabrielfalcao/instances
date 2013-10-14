@@ -1,15 +1,17 @@
-{% for repository in tracked_repositories %}<script id="meta-{{ repository.name }}" type="text/json">
-                                            {{ json.dumps(repository,indent=2)|safe }}
-</script>{% endfor %}
+{% for repository_name in tracked_repositories %}
+{% set meta_id="meta-" + repository_name.replace("/", "-") %}
+{% set repository=repositories_by_name[repository_name] %}
+<script id="{{ meta_id }}" type="text/json">{{ json.dumps(repository,indent=2)|safe }}</script>{% endfor %}
 
 <div class="uk-grid">
   <div class="uk-width-1-6">
-    {% include "dashboard/map.svg" %}
     {% if tracked_repositories %}
     <h3>Choose a tracked repository:</h3>
 <ul class="uk-nav">
     {% for repository_name in tracked_repositories %}
-      <li><a class="live-stats-repository" href="#stats-{{ repository_name }}" data-meta-id="#meta-{{ repository_name }}">{{ repository_name }}</a></li>
+{% set meta_id="meta-" + repository_name.replace("/", "-") %}
+{% set repository=repositories_by_name[repository_name] %}
+      <li><a class="live-stats-repository" href="#stats-{{ repository_name }}" data-meta-id="#{{ meta_id }}">{{ repository_name }}</a></li>
     {% endfor %}
 </ul>
     {% else %}
@@ -18,13 +20,13 @@
   </div>
   {% if tracked_repositories %}
   <div class="uk-width-5-6">
+    {% include "dashboard/map.svg" %}
     {% raw %}
     <div ng-model="visitors" class="ng-cloak">
-      <h1>{{ visitors.stats.project }}</h1>
-      <h2 id="overall">Overall: {{ visitors.stats.overall }}</h2>
-      <h2 id="forks">Forks: {{ visitors.stats.forks }}</h2>
-      <h2 id="watchers">Watchers: {{ visitors.stats.watchers }}</h2>
-      <h2 id="following">Follow: {{ visitors.stats.follow }}</h2>
+      <h1>{{ visitors.repository.full_name }}</h1>
+      <h2 id="overall">Total: {{ visitors.total }}</h2>
+      <h2 id="forks">Forks: {{ visitors.repository.forks }}</h2>
+      <h2 id="watchers">Watchers: {{ visitors.repository.watchers }}</h2>
     </div>
     {% endraw %}
   </div>

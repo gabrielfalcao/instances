@@ -6,6 +6,9 @@ $(function(){
 
     var socket = io.connect(ADDRESS);
     var scope = angular.element($("body")).scope();
+    scope.$apply(function(){
+        scope.visitors = {};
+    });
 
     socket.on('connect', function() {
         console.log('connected');
@@ -16,12 +19,13 @@ $(function(){
     socket.on('disconnect', function() {
         console.log('disconnected');
     });
-    socket.on('visitors', function(visitors) {
+    socket.on("visitors", function(visitors) {
         console.log('visitors', visitors);
         scope.$apply(function(){
             scope.visitors = visitors;
         });
     });
+
     $(".live-stats-repository").on("click", function(e){
         e.preventDefault();
         var $btn = $(this);
@@ -36,7 +40,6 @@ $(function(){
             "username": username,
             "project": repository.name
         };
-	socket.emit('stop', payload);
 	socket.emit('repository_statistics', payload);
     });
 });

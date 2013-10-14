@@ -138,6 +138,7 @@ def dashboard():
     key = KeyRing.for_user_project_name_set(username)
 
     repositories = g.user.list_repositories()
+    repositories_by_name = dict([(r['full_name'], r) for r in repositories])
     tracked_repositories = redis.smembers(key)
 
     def repository_is_being_tracked(repo):
@@ -150,6 +151,7 @@ def dashboard():
     context = {
         'tracked_repositories': tracked_repositories,
         'repositories': repositories,
+        'repositories_by_name': repositories_by_name,
         'repository_is_being_tracked': repository_is_being_tracked
     }
     return render_template('dashboard.html', **context)
@@ -213,10 +215,10 @@ def robots_txt():
 
 @mod.route("/bin/<username>/<project>.svg")
 def serve_stat_svg(username, project):
-    norecord = 'norecord' in request.args
+    should_record = 'norecord' not in request.args
 
     user = User.using(db.engine).find_one_by(username=username)
-    skip_record = not user
+
     data = {
         'request': {
             'remote_addr': request.remote_addr,
@@ -241,11 +243,11 @@ def serve_stat_svg(username, project):
     }
     key = KeyRing.for_user_project_stats_list(username, project)
     value = json.dumps(data)
-
-    redis = Redis()
-    redis.rpush(key, value)
-    set_key = KeyRing.for_user_project_name_set(username)
-    redis.sadd(set_key, "{0}/{1}".format(username, project))
+    if should_record:
+        redis = Redis()
+        redis.rpush(key, value)
+        set_key = KeyRing.for_user_project_name_set(username)
+        redis.sadd(set_key, "{0}/{1}".format(username, project))
 
     context = {
         'username': username,

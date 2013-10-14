@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import re
 import time
 import ejson
 import logging
@@ -124,10 +125,25 @@ class GithubUser(Resource):
         response = self.endpoint.retrieve(path)
         return ejson.loads(response['response_data'])
 
+    def get_next_path(self, response):
+        raw = response['response_headers'].get('link')
+        # https://api.github.com/user/54914/repos?sort=pushed&page=2>; rel="next",
+        found = re.search(r'https://api.github.com([^;]+); rel="next"', raw)
+        if found:
+            return found.group(1)
+
+    def get_path_recursively(self, path):
+        response = self.endpoint.retrieve(path)
+        value = ejson.loads(response['response_data'])
+        next_path = self.get_next_path(response)
+        if next_path:
+            value += self.get_path_recursively(next_path)
+
+        return value
+
     def get_repositories(self, username):
         path = '/users/{0}/repos?sort=pushed'.format(username)
-        response = self.endpoint.retrieve(path)
-        return ejson.loads(response['response_data'])
+        return self.get_path_recursively(path)
 
 
 class GithubRepository(Resource):

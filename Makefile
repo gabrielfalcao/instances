@@ -49,7 +49,7 @@ publish:
 	fi
 
 run:
-	@PYTHONPATH=`pwd` gunicorn -w 8 -b 0.0.0.0:5000 instances.app:app.web
+	@PYTHONPATH=`pwd` gunicorn -t 10000000000 -w 1 -b 127.0.0.1:5000 -k socketio.sgunicorn.GeventSocketIOWorker instances.server:app
 
 check:
 	@PYTHONPATH=`pwd` ./instances/bin.py check

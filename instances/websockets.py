@@ -10,6 +10,10 @@ from datetime import datetime
 from socketio.namespace import BaseNamespace
 from socketio.mixins import BroadcastMixin
 from redis import Redis
+from instances.core import KeyRing
+from instances.models import User
+from instances import db
+from instances.api import GithubUser, GithubEndpoint, GithubRepository
 
 
 class Namespace(BaseNamespace):
@@ -55,24 +59,28 @@ class InstancesBroadcaster(Namespace, BroadcastMixin):
 
 class StatsSender(InstancesBroadcaster):
     def get_visitors(self, redis, data):
-        overall_key = "set:github:{username}/{project}".format(**data)
-        overall = redis.smembers(overall_key)
-        by_category = {
-            'overall': overall,
-        }
-        for kind in ['watchers', 'forks', 'follow']:
-            key = "list:{0}:github:{username}/{project}".format(kind, **data)
-            raw_visitors = redis.lrange(key, 0, 1000)
-            visitors = map(json.loads, raw_visitors)
-            by_category[kind] = visitors
+        username = data['username']
+        project = data['project']
 
-        stats = {}
-        for cat, visitors in by_category.iteritems():
-            stats[cat] = len(visitors)
+        user = User.using(db.engine).find_one_by(username=username)
+        if not user:
+            self.stop()
+            return
+
+        api = GithubEndpoint(user.github_token, public=True)
+        repository_fetcher = GithubRepository(api)
+
+        repository = repository_fetcher.get(username, project)
+
+
+        key = KeyRing.for_user_project_stats_list(username, project)
+        raw_visitors = redis.lrange(key, 0, 1000)
+        visitors = map(json.loads, raw_visitors)
 
         value = {
-            'by_category': by_category,
-            'stats': stats,
+            'visitors': visitors,
+            'total': len(visitors),
+            'repository': repository,
         }
         return value
 
@@ -83,7 +91,8 @@ class StatsSender(InstancesBroadcaster):
         redis = Redis()
         while self.should_live():
             visitors = self.get_visitors(redis, data)
-            self.emit("visitors:{0}".format(project), visitors)
+            key = "visitors"
+            self.emit(key, visitors)
             gevent.sleep(.3)
 
     def on_repository_statistics(self, msg):

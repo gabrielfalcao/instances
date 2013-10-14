@@ -8,8 +8,6 @@ from datetime import datetime
 
 from flask.ext.script import Command
 from flask.ext.script import Command, Option
-from socketio import socketio_manage
-from socketio.server import SocketIOServer
 
 
 LOGO = """
@@ -35,34 +33,10 @@ LOGO = """
 \033[1;37m      `-'--'---'
 \033[0m\r"""
 
-class SocketIOApp(object):
-    """Stream sine values"""
-    def __init__(self, app):
-        self.app = app
-
-    def __call__(self, environ, start_response):
-        from instances.websockets import NAMESPACES
-        if environ['PATH_INFO'].startswith('/socket.io'):
-            socketio_manage(environ, NAMESPACES)
-            return
-
-        return self.app.web(environ, start_response)
 
 class Runserver(Command):
     def run(self):
-        from instances.app import App
-
-        from instances import settings
-        from instances.log import logger
-
-        app = App.from_env()
-
-        server = SocketIOServer(
-            (settings.HOST, settings.PORT), SocketIOApp(app),
-            namespace="socket.io",
-            transports=['xhr-polling', 'xhr-multipart', 'jsonp-polling'],
-            policy_server=False
-        )
+        from instances.server import app
         print "\033[1;37mServing Instances on {0}:{1}\033[0m".format(settings.HOST, settings.PORT)
         server.serve_forever()
 

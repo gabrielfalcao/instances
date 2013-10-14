@@ -3,21 +3,21 @@
 </script>{% endfor %}
 
 <div class="uk-grid">
-  <div class="uk-width-2-6">
+  <div class="uk-width-1-6">
     {% include "dashboard/map.svg" %}
     {% if tracked_repositories %}
     <h3>Choose a tracked repository:</h3>
-    <ul class="uk-list uk-list-striped">
+<ul class="uk-nav">
     {% for repository_name in tracked_repositories %}
       <li><a class="live-stats-repository" href="#stats-{{ repository_name }}" data-meta-id="#meta-{{ repository_name }}">{{ repository_name }}</a></li>
     {% endfor %}
-    </ul>
+</ul>
     {% else %}
     <h3>There are no tracked repositories</h3>
     {% endif %}
   </div>
   {% if tracked_repositories %}
-  <div class="uk-width-4-6">
+  <div class="uk-width-5-6">
     {% raw %}
     <div ng-model="visitors" class="ng-cloak">
       <h1>{{ visitors.stats.project }}</h1>

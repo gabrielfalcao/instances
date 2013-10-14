@@ -54,6 +54,7 @@ def test_base_request_recorder_view(context, time):
     context.redis.lrange("list:stats:github:gabrielfalcao/HTTPretty", 0, 1).should.equal([
         json.dumps({
             "request": {
+                "geo": None,
                 "headers": {
                     "Referrer": "http://facebook.com",
                     "Host": "localhost",
@@ -77,6 +78,8 @@ def test_base_request_recorder_view(context, time):
                 "data": ""
             }, "time": 'EPOCH_TIME'})
     ])
+    # And the redis key for that user should contain that project
+    context.redis.smembers("set:github:gabrielfalcao").should.equal(set(['gabrielfalcao/HTTPretty']))
 
 
 

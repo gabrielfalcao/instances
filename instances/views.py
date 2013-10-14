@@ -20,7 +20,7 @@ from flask import (
 from instances import settings
 from instances.api import GithubUser, GithubEndpoint, GithubRepository
 from instances.handy.decorators import requires_login
-from instances.handy.functions import user_is_authenticated
+from instances.handy.functions import user_is_authenticated, geo_data_for_ip
 from instances.models import User
 from instances.log import logger
 from instances.core import KeyRing
@@ -134,7 +134,8 @@ def show_settings():
 @requires_login
 def dashboard():
     redis = Redis()
-    key = "set:{login}:repositories".format(**session['github_user_data'])
+    username = session['github_user_data']['login']
+    key = KeyRing.for_user_project_name_set(username)
 
     repositories = g.user.list_repositories()
     tracked_repositories = redis.smembers(key)
@@ -233,7 +234,8 @@ def serve_stat_svg(username, project):
                 'language': request.user_agent.language,
                 'string': request.user_agent.string,
                 'version': request.user_agent.version,
-            }
+            },
+            'geo': geo_data_for_ip(request.remote_addr),
         },
         'time': time.time(),
     }
@@ -242,6 +244,8 @@ def serve_stat_svg(username, project):
 
     redis = Redis()
     redis.rpush(key, value)
+    set_key = KeyRing.for_user_project_name_set(username)
+    redis.sadd(set_key, "{0}/{1}".format(username, project))
 
     context = {
         'username': username,
@@ -269,6 +273,7 @@ def serve_btn(kind, username, project, size):
     if size == 'large':
         size_meta['width'] = '152px'
         size_meta['height'] = '30px'
+    count = repository.get(kind, 0)
 
     TEXTS = {
         'watchers': 'Stars',

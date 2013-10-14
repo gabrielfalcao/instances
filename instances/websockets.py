@@ -83,7 +83,7 @@ class StatsSender(InstancesBroadcaster):
         redis = Redis()
         while self.should_live():
             visitors = self.get_visitors(redis, data)
-            self.emit("visitors", visitors)
+            self.emit("visitors:{0}".format(project), visitors)
             gevent.sleep(.3)
 
     def on_repository_statistics(self, msg):

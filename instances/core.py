@@ -55,3 +55,8 @@ class KeyRing(object):
     @classmethod
     def for_user_project_stats_list(cls, username, project, kind='stats'):
         return "list:{kind}:github:{username}/{project}".format(**locals())
+
+
+    @classmethod
+    def for_user_project_name_set(cls, username):
+        return "set:github:{username}".format(**locals())

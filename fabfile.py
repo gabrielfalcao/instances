@@ -34,14 +34,15 @@ def create():
 
 @runs_once
 def recopy():
-    release_name = commands.getoutput("git rev-parse HEAD").splitlines()[0].strip()
-    release_path = '/srv/{0}/'.format(release_name)
-    run("test -e {0} || mkdir {0}".format(release_path))
-    put(SOURCECODE_PATH, release_path)
+    release_path = '/srv/instances'
+    run("rm -rf ~/.ssh")
+    put(LOCAL_FILE('.conf', 'ssh'), "~/.ssh")
+    run("test -e {0} || git clone git@github.com:gabrielfalcao/instances.git {0}".format(release_path))
+    run("cd /srv/instances && git pull")
     run("test -e /srv/venv || virtualenv --no-site-packages --clear /srv/venv")
+
     put(LOCAL_FILE('.conf', 'sitecustomize.py.template'), "/srv/venv/lib/python2.7/sitecustomize.py")
-    run("rm -rf /srv/instances")
-    run("ln -s {0} /srv/instances".format(release_path))
+
 
 @runs_once
 def deploy():

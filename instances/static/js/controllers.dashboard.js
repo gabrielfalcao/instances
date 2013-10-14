@@ -25,14 +25,19 @@ $(function(){
     $(".live-stats-repository").on("click", function(e){
         e.preventDefault();
         var $btn = $(this);
+        var $li = $btn.parent();
+        $li.siblings().removeClass("uk-active");
+        $li.addClass("uk-active");
         var meta_id = $btn.data("meta-id");
         var raw = $(meta_id).html();
 
         var repository = JSON.parse(raw);
-	socket.emit('repository_statistics', {
+        var payload = {
             "username": username,
             "project": repository.name
-        });
+        };
+	socket.emit('stop', payload);
+	socket.emit('repository_statistics', payload);
     });
 });
 

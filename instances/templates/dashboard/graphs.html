@@ -7,8 +7,8 @@
     {% if tracked_repositories %}
     <h3>Choose a tracked repository:</h3>
     <ul class="uk-list uk-list-striped">
-    {% for repository in tracked_repositories %}
-      <li><a class="live-stats-repository" href="#stats-{{ repository.name }}" data-meta-id="#meta-{{ repository.name }}">{{ repository.name }}</a></li>
+    {% for repository_name in tracked_repositories %}
+      <li><a class="live-stats-repository" href="#stats-{{ repository_name }}" data-meta-id="#meta-{{ repository_name }}">{{ repository_name }}</a></li>
     {% endfor %}
     </ul>
     {% else %}

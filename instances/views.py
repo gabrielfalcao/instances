@@ -259,7 +259,7 @@ def serve_btn(kind, username, project, size):
         redis.sadd(overall_key, value)
 
         key = "set:{0}:repositories".format(username)
-        redis.sadd(key, json.dumps(repository))
+        redis.sadd(key, project)
 
     size_meta = {
         'width': '52px',

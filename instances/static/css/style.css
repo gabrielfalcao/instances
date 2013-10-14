@@ -61,3 +61,8 @@ html, body {
 .uk-grid.footer a,.uk-grid.footer h1 {
   color: white;
 }
+
+textarea.pre {
+  font-family: "Monaco", "Inconsolata", "monospace";
+  font-size: 14px;
+}

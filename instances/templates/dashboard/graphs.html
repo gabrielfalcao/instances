@@ -1,38 +1,7 @@
-<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Stargazers</th>
-      <th>Forks</th>
-      <th>Tracked</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for repository in repositories %}
-    <tr>
-      <td>{{ repository.name }}</td>
-      <td>{{ repository.watchers }}</td>
-      <td>{{ repository.forks }}</td>
-      <td>{{ repository_is_being_tracked(repository) }}</td>
-      <td>
-        <a href="#" data-uk-modal="{target:'#my-id'}" class="uk-button"><i class="uk-icon-code"></i> Get tracking code</a>
-        <div id="my-id" class="uk-modal">
-	  <div class="uk-modal-dialog">
-	    <a class="uk-modal-close uk-close"></a>
-            {% for kind in ['watchers', 'forks', 'follow'] %}
-            <h3>{{ kind.title() }}</h3>
-            {% for size in ['small', 'large'] %}
-              <p><strong>{{ size.title() }}</strong>
-                <iframe src="{{ full_url_for('.serve_btn', kind=kind, username=username, project=repository.name, size=small) }}" allowtransparency="true" frameborder="0" scrolling="0" width="62px" height="20px"></iframe>
-                <pre>{{ '<iframe src="' + full_url_for(".serve_btn", kind=kind, username=username, project=repository.name, size=small) + '" allowtransparency="true" frameborder="0" scrolling="0" width="62px" height="20px"></iframe>' }}</pre>
-              </p>
-            {% endfor %}
-          {% endfor %}
-	  </div>
-        </div>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<ul class="uk-list uk-list-striped">
+  {% for repository in tracked_repositories %}
+  <li>
+    {{ repository.name }}
+  </li>
+  {% endfor %}
+</ul>

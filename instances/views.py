@@ -214,11 +214,12 @@ def serve_btn(kind, username, project, size):
 
     count = repository.get(kind, 0)
 
-    redis = Redis()
-    redis.rpush(key, value)
+    if settings.HOST not in request.referrer:
+        redis = Redis()
+        redis.rpush(key, value)
 
-    key = "set:{0}:repositories".format(username)
-    redis.sadd(key, json.dumps(repository))
+        key = "set:{0}:repositories".format(username)
+        redis.sadd(key, json.dumps(repository))
 
     context = {
         'kind': kind,

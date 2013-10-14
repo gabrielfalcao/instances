@@ -4,9 +4,7 @@ from __future__ import unicode_literals
 
 import json
 import redis
-import boto
 
-from boto.dynamodb.exceptions import DynamoDBKeyNotFoundError
 
 from functools import partial
 import sqlalchemy as db

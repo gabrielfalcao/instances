@@ -73,9 +73,9 @@ production-dump.sql:
 	@echo "Saved at production-dump.sql"
 
 deploy: prepare
-	@fab -u root -H 37.139.8.227 recopy deploy
+	@fab -u root -H instanc.es recopy deploy
 
 create-machine:
-	@fab -u root -H 37.139.8.227 create
+	@fab -u root -H instanc.es create
 
 full-deploy: create-machine deploy

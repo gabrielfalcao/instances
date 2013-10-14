@@ -11,4 +11,6 @@ freezegun
 coverage
 rednose
 webdriverplus
-
+cssselect==0.8
+lxml==3.1.2
+pyquery==1.2.4

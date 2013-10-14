@@ -83,3 +83,5 @@ create-machine:
 
 
 full-deploy: recopy deploy
+
+apocalyptical-deploy: create-machine full-deploy

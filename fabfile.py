@@ -49,7 +49,7 @@ def recopy():
 def deploy():
     release_name = commands.getoutput("git rev-parse HEAD").splitlines()[0].strip()
     release_path = '/srv/{0}/'.format(release_name)
-    run("/srv/venv/bin/pip install -r /srv/instances/requirements.txt")
+    run("/srv/venv/bin/pip install -q -r /srv/instances/requirements.txt")
     put(LOCAL_FILE('.conf', 'supervisor.conf'), "/etc/supervisor/conf.d/instances.conf")
     run("service supervisor stop")
     run("(ps aux | egrep supervisord | grep -v grep | awk '{ print $2 }' | xargs kill -9 2>&1>/dev/null) 2>&1>/dev/null || printf '\033[1;32mSupervisor is down\033[0m'")

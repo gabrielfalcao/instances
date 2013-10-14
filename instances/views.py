@@ -213,8 +213,7 @@ def serve_btn(kind, username, project, size):
     value = json.dumps(data)
 
     count = repository.get(kind, 0)
-
-    if settings.HOST not in request.referrer:
+    if request.referrer and settings.HOST not in request.referrer:
         redis = Redis()
         redis.rpush(key, value)
 

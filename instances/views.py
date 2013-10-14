@@ -218,7 +218,9 @@ def robots_txt():
 
 
 def record_stats(username, project):
-    should_record = 'norecord' not in request.args
+    norecord = 'norecord' in request.args
+    if norecord:
+        return
 
     user = User.using(db.engine).find_one_by(username=username)
 

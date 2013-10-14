@@ -29,9 +29,9 @@ $(function(){
     $(".live-stats-repository").on("click", function(e){
         e.preventDefault();
         var $btn = $(this);
-        var $li = $btn.parent();
-        $li.siblings().removeClass("uk-active");
-        $li.addClass("uk-active");
+        var $li = $btn.parents("li");
+        $li.siblings().removeClass("active");
+        $li.addClass("active");
         var meta_id = $btn.data("meta-id");
         var raw = $(meta_id).html();
 

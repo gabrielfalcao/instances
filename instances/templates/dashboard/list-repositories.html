@@ -20,9 +20,10 @@
       <td>{{ repository.watchers }}</td>
       <td>{{ repository.forks }}</td>
       <td>{{ repository_is_being_tracked(repository) }}</td>
+      {% set modal_id="#modal-" + "-".join([username, repository.name]) %}
       <td>
-        <a href="#" data-uk-modal="{target:'#my-id'}" class="uk-button"><i class="uk-icon-code"></i> Get tracking code</a>
-        <div id="my-id" class="uk-modal">
+        <a href="#" data-uk-modal="{target:'{{ modal_id }}'}" class="uk-button"><i class="uk-icon-code"></i> Get tracking code</a>
+        <div id="{{ modal_id.lstrip('#') }}" class="uk-modal">
 	  <div class="uk-modal-dialog">
 	    <a class="uk-modal-close uk-close"></a>
             {% for kind in ['watchers', 'forks', 'follow'] %}

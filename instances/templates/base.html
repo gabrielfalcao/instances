@@ -15,7 +15,7 @@
   </head>
   <body {% block body_attributes %}{% endblock %}>
     <nav class="uk-navbar mm-navbar">
-      <a class="uk-navbar-brand" href="#">Instanc.es</a>
+      <a class="uk-navbar-brand" href="{{ url_for('.index') }}">Instanc.es</a>
       <div class="uk-navbar-flip">
         <ul class="uk-navbar-nav">
           {% block navbar %}

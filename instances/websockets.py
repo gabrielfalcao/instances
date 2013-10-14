@@ -56,7 +56,7 @@ class InstancesBroadcaster(Namespace, BroadcastMixin):
 class StatsSender(InstancesBroadcaster):
     def get_visitors(self, redis, data):
         overall_key = "set:github:{username}/{project}".format(**data)
-        raw_overall = map(json.loads, redis.smembers(overall_key))
+        raw_overall = map(json.loads, set(redis.smembers(overall_key)))
         overall = sorted(raw_overall, key=lambda x: x['time'], reverse=True)
         by_category = {
             'overall': overall,
@@ -75,7 +75,6 @@ class StatsSender(InstancesBroadcaster):
             'by_category': by_category,
             'stats': stats,
         }
-        print stats
         return value
 
     def random_status(self, data):

@@ -210,14 +210,19 @@ def robots_txt():
 
 @mod.route("/bin/btn/<kind>-<username>-<project>-<size>.html")
 def serve_btn(kind, username, project, size):
+    norecord = 'norecord' in request.args
+
     user = User.using(db.engine).find_one_by(username=username)
     if not user or kind not in ['watchers', 'forks', 'follow']:
         return render_template('wrong-button.html', **locals())
 
-    api = GithubEndpoint(user.github_token, public=True)
-    repository_fetcher = GithubRepository(api)
+    if norecord:
+        repository = {}
+    else:
+        api = GithubEndpoint(user.github_token, public=True)
+        repository_fetcher = GithubRepository(api)
 
-    repository = repository_fetcher.get(username, project)
+        repository = repository_fetcher.get(username, project)
 
     data = {
         'request': {
@@ -245,22 +250,46 @@ def serve_btn(kind, username, project, size):
     value = json.dumps(data)
 
     count = repository.get(kind, 0)
+    do_track = not norecord
 
-    redis = Redis()
-    redis.rpush(key, value)
-    redis.sadd(overall_key, value)
+    if do_track:
+        redis = Redis()
+        redis.rpush(key, value)
+        redis.sadd(overall_key, value)
 
-    key = "set:{0}:repositories".format(username)
-    redis.sadd(key, json.dumps(repository))
+        key = "set:{0}:repositories".format(username)
+        redis.sadd(key, json.dumps(repository))
 
+    size_meta = {
+        'width': '52px',
+        'height': '20px',
+        'name': size,
+    }
+    if size == 'large':
+        size_meta['width'] = '152px'
+        size_meta['height'] = '30px'
+
+    TEXTS = {
+        'watchers': 'Stars',
+        'forks': 'Forks',
+        'follow': 'Follow @{0}'.format(username),
+    }
+
+    HREFS = {
+        'watchers': 'https://github.com/' + username + '/' + project + '/stargazers',
+        'forks': 'https://github.com/' + username + '/' + project + '/network',
+        'follow': 'https://github.com/' + username + '/followers',
+    }
     context = {
         'kind': kind,
         'username': username,
         'repository': repository,
         'count': count,
-        'size': size,
+        'size': size_meta,
+        'text': TEXTS[kind],
+        'href': HREFS[kind],
     }
-    return render_template('github-btn.html', **context)
+    return render_template('btn/btn.html', **context)
 
 
 @mod.route("/bin/json/<username>")

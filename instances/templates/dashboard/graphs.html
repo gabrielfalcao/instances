@@ -4,19 +4,28 @@
 
 <div class="uk-grid">
   <div class="uk-width-2-6">
+    {% if tracked_repositories %}
+    <h3>Choose a tracked repository:</h3>
     <ul class="uk-list uk-list-striped">
     {% for repository in tracked_repositories %}
       <li><a class="live-stats-repository" href="#stats-{{ repository.name }}" data-meta-id="#meta-{{ repository.name }}">{{ repository.name }}</a></li>
     {% endfor %}
     </ul>
+    {% else %}
+    <h3>There are no tracked repositories</h3>
+    {% endif %}
   </div>
+  {% if tracked_repositories %}
   <div class="uk-width-4-6">
     {% raw %}
-    <h1>{{ visitors.stats.project }}</h1>
-    <h2 id="overall">Overall: {{ visitors.stats.overall }}</h2>
-    <h2 id="forks">Forks: {{ visitors.stats.forks }}</h2>
-    <h2 id="watchers">Watchers: {{ visitors.stats.watchers }}</h2>
-    <h2 id="following">Follow: {{ visitors.stats.follow }}</h2>
+    <div ng-model="visitors" class="ng-cloak">
+      <h1>{{ visitors.stats.project }}</h1>
+      <h2 id="overall">Overall: {{ visitors.stats.overall }}</h2>
+      <h2 id="forks">Forks: {{ visitors.stats.forks }}</h2>
+      <h2 id="watchers">Watchers: {{ visitors.stats.watchers }}</h2>
+      <h2 id="following">Follow: {{ visitors.stats.follow }}</h2>
+    </div>
     {% endraw %}
   </div>
+  {% endif %}
 </div>

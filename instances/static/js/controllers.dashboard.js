@@ -27,7 +27,7 @@ $(function(){
         var $btn = $(this);
         var meta_id = $btn.data("meta-id");
         var raw = $(meta_id).html();
-        console.log(raw);
+
         var repository = JSON.parse(raw);
 	socket.emit('repository_statistics', {
             "username": username,

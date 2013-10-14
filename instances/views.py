@@ -7,7 +7,15 @@ import time
 import gevent
 import json
 from flask import (
-    Blueprint, request, session, render_template, redirect, g, flash, Response, url_for
+    Blueprint,
+    request,
+    session,
+    render_template,
+    redirect,
+    g,
+    flash,
+    Response,
+    url_for,
 )
 from instances import settings
 from instances.api import GithubUser, GithubEndpoint, GithubRepository
@@ -26,20 +34,29 @@ def json_response(data, status=200):
     return Response(json.dumps(data), mimetype="text/json", status=int(status))
 
 
-def error_json_response(message):
-    return json_response({'success': False, 'error': {'message': message}})
+def error_json_response(message, status=200):
+    return json_response({
+        'success': False,
+        'error': {
+            'message': message
+        }
+    }, status=status)
 
 
 github = GithubAuth(
     client_id=settings.GITHUB_CLIENT_ID,
     client_secret=settings.GITHUB_CLIENT_SECRET,
     session_key='user_id',
-    # request_token_params={'scope': 'user,user:email,user:follow,repo,repo:status'}
+    # request_token_params={
+    #     'scope': 'user,user:email,user:follow,repo,repo:status'
+    # }
 )
+
 
 @mod.before_request
 def prepare():
     g.user = None
+
 
 def add_message(message, error=None):
     if 'messages' not in session:
@@ -51,6 +68,7 @@ def add_message(message, error=None):
         'alert_class': error is None and 'uk-alert-success' or 'uk-alert-danger',
         'error': error,
     })
+
 
 @github.access_token_getter
 def get_github_token(token=None):
@@ -133,6 +151,7 @@ def dashboard():
     }
     return render_template('dashboard.html', **context)
 
+
 @mod.route("/thank-you")
 def thank_you():
     if not ('subscription_email' in session and 'subscription_is_donor' in session):
@@ -156,6 +175,7 @@ DONOR_SET_KEYS = {
     False: "set:pitch-subscribers",
     True: "set:pitch-private-beta-donors"
 }
+
 
 @mod.route("/subscribe", methods=["POST"])
 def subscribe():
@@ -217,15 +237,18 @@ def serve_btn(kind, username, project, size):
                 'string': request.user_agent.string,
                 'version': request.user_agent.version,
             }
-        }
+        },
+        'time': time.time(),
     }
     key = "list:{0}:github:{1}/{2}".format(kind, username, project)
+    overall_key = "set:github:{0}/{1}".format(username, project)
     value = json.dumps(data)
 
     count = repository.get(kind, 0)
 
     redis = Redis()
     redis.rpush(key, value)
+    redis.sadd(overall_key, value)
 
     key = "set:{0}:repositories".format(username)
     redis.sadd(key, json.dumps(repository))

@@ -54,16 +54,38 @@ class InstancesBroadcaster(Namespace, BroadcastMixin):
 
 
 class StatsSender(InstancesBroadcaster):
+    def get_visitors(self, redis, data):
+        overall_key = "set:github:{username}/{project}".format(**data)
+        raw_overall = map(json.loads, redis.smembers(overall_key))
+        overall = sorted(raw_overall, key=lambda x: x['time'], reverse=True)
+        by_category = {
+            'overall': overall,
+        }
+        for kind in ['watchers', 'forks', 'follow']:
+            key = "list:{0}:github:{username}/{project}".format(kind, **data)
+            raw_visitors = redis.lrange(key, 0, 1000)
+            visitors = map(json.loads, raw_visitors)
+            by_category[kind] = visitors
+
+        stats = {}
+        for cat, visitors in by_category.iteritems():
+            stats[cat] = len(visitors)
+
+        value = {
+            'by_category': by_category,
+            'stats': stats,
+        }
+        print stats
+        return value
+
     def random_status(self, data):
-        if not isinstance(data, dict) or data.keys() != ["username", "project", "kind"]:
+        if not isinstance(data, dict) or data.keys() != ["username", "project"]:
             return
 
         redis = Redis()
-        key = "list:{kind}:github:{username}/{project}".format(**data)
         while self.should_live():
-            visitors = redis.lrange(key, 0, 1000)
+            visitors = self.get_visitors(redis, data)
             self.emit("visitors", visitors)
-            print key
             gevent.sleep(.3)
 
     def on_repository_statistics(self, msg):

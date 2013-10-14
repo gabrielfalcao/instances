@@ -20,7 +20,6 @@ $(function(){
         console.log('visitors', visitors);
         scope.$apply(function(){
             scope.visitors = visitors;
-            console.log(visitors);
         });
     });
     $(".live-stats-repository").on("click", function(e){
@@ -32,8 +31,7 @@ $(function(){
         var repository = JSON.parse(raw);
 	socket.emit('repository_statistics', {
             "username": username,
-            "project": repository.name,
-            "kind": "forks"
+            "project": repository.name
         });
     });
 });

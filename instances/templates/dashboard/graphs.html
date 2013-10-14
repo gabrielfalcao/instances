@@ -1,9 +1,22 @@
 {% for repository in tracked_repositories %}<script id="meta-{{ repository.name }}" type="text/json">
-{{ json.dumps(repository,indent=2)|safe }}
+                                            {{ json.dumps(repository,indent=2)|safe }}
 </script>{% endfor %}
 
-<ul class="uk-list uk-list-striped">
-  {% for repository in tracked_repositories %}
-  <li><a class="live-stats-repository" href="#stats-{{ repository.name }}" data-meta-id="#meta-{{ repository.name }}">{{ repository.name }}</a></li>
-  {% endfor %}
-</ul>
+<div class="uk-grid">
+  <div class="uk-width-2-6">
+    <ul class="uk-list uk-list-striped">
+    {% for repository in tracked_repositories %}
+      <li><a class="live-stats-repository" href="#stats-{{ repository.name }}" data-meta-id="#meta-{{ repository.name }}">{{ repository.name }}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+  <div class="uk-width-4-6">
+    {% raw %}
+    <h1>{{ visitors.stats.project }}</h1>
+    <h2 id="overall">Overall: {{ visitors.stats.overall }}</h2>
+    <h2 id="forks">Forks: {{ visitors.stats.forks }}</h2>
+    <h2 id="watchers">Watchers: {{ visitors.stats.watchers }}</h2>
+    <h2 id="following">Follow: {{ visitors.stats.follow }}</h2>
+    {% endraw %}
+  </div>
+</div>

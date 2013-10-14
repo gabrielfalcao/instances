@@ -13,17 +13,24 @@ SOURCECODE_PATH = LOCAL_FILE('*')
 @runs_once
 def create():
     run("apt-get -q=2 update")
+    dependencies = [
+        'python-pip',
+        'supervisor',
+        'python-dev',
+        'libmysqlclient-dev',
+        'mysql-client',
+        'redis-server',
+        'libxml2-dev',
+        'libxslt1-dev',
+        'libevent-dev',
+        'libev-dev',
+        'virtualenvwrapper',
+    ]
     run("apt-get install -q=2 -y aptitude")
-    run("aptitude install -q=2 -y python-pip")
-    run("aptitude install -q=2 -y python-dev")
-    run("aptitude install -q=2 -y libmysqlclient-dev")
-    run("aptitude install -q=2 -y mysql-client")
-    run("aptitude install -q=2 -y redis-server")
-    run("aptitude install -q=2 -y libxml2-dev")
-    run("aptitude install -q=2 -y libxslt1-dev")
-    run("aptitude install -q=2 -y libevent-dev")
-    run("aptitude install -q=2 -y libev-dev")
-    run("pip install virtualenvwrapper")
+    run("aptitude install -q=2 -y {0}".format(" ".join(dependencies)))
+    run("test -e /srv && rm -rf /srv/")
+    run("mkdir -p /srv/")
+
 
 @runs_once
 def recopy():
@@ -32,7 +39,7 @@ def recopy():
     run("test -e {0} || mkdir {0}".format(release_path))
     put(SOURCECODE_PATH, release_path)
     run("test -e /srv/venv || virtualenv --no-site-packages --clear /srv/venv")
-    put(LOCAL_FILE('.conf', 'sitecustomize.py'), "/srv/venv/lib/python2.7/sitecustomize.py")
+    put(LOCAL_FILE('.conf', 'sitecustomize.py.template'), "/srv/venv/lib/python2.7/sitecustomize.py")
     run("rm -rf /srv/instances")
     run("ln -s {0} /srv/instances".format(release_path))
 

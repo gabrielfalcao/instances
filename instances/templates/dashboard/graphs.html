@@ -1,5 +1,5 @@
 {% for repository in tracked_repositories %}<script id="meta-{{ repository.name }}" type="text/json">
-{{ json.dumps(repository,indent=2) }}
+{{ json.dumps(repository,indent=2)|safe }}
 </script>{% endfor %}
 
 <ul class="uk-list uk-list-striped">

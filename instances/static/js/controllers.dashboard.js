@@ -16,10 +16,11 @@ $(function(){
     socket.on('disconnect', function() {
         console.log('disconnected');
     });
-    socket.on('visitors', function(visitos) {
+    socket.on('visitors', function(visitors) {
         console.log('visitors', visitors);
         scope.$apply(function(){
             scope.visitors = visitors;
+            console.log(visitors);
         });
     });
     $(".live-stats-repository").on("click", function(e){
@@ -27,13 +28,13 @@ $(function(){
         var $btn = $(this);
         var meta_id = $btn.data("meta-id");
         var raw = $(meta_id).html();
-        var metadata = JSON.parse(raw);
+        console.log(raw);
+        var repository = JSON.parse(raw);
 	socket.emit('repository_statistics', {
             "username": username,
-            "project": meta.name,
+            "project": repository.name,
             "kind": "forks"
         });
-
     });
 });
 

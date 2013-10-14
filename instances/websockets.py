@@ -54,15 +54,16 @@ class InstancesBroadcaster(Namespace, BroadcastMixin):
 
 
 class StatsSender(InstancesBroadcaster):
-    def random_status(self, msg):
-        print "StatsSender", msg
-        return
-        data = json.loads(msg)
+    def random_status(self, data):
+        if not isinstance(data, dict) or data.keys() != ["username", "project", "kind"]:
+            return
+
         redis = Redis()
-        key = "list:{username}:github:{project}/{kind}".format(**data)
+        key = "list:{kind}:github:{username}/{project}".format(**data)
         while self.should_live():
             visitors = redis.lrange(key, 0, 1000)
             self.emit("visitors", visitors)
+            print key
             gevent.sleep(.3)
 
     def on_repository_statistics(self, msg):

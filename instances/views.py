@@ -219,7 +219,7 @@ def serve_btn(kind, username, project, size):
             }
         }
     }
-    key = "list:{2}:github:{0}/{1}".format(username, project, kind)
+    key = "list:{0}:github:{1}/{2}".format(kind, username, project)
     value = json.dumps(data)
 
     count = repository.get(kind, 0)

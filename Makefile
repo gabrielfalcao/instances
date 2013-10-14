@@ -17,7 +17,7 @@ clean:
 
 test-kind:
 	@-echo 'create database if not exists instances_test ' | mysql -uroot
-	@INSTANCES_DB=mysql://root@localhost/instances_test INSTANCES_SETTINGS_MODULE="tests.settings" PYTHONPATH="$(PYTHONPATH)" \
+	@TESTING=true INSTANCES_DB=mysql://root@localhost/instances_test INSTANCES_SETTINGS_MODULE="tests.settings" PYTHONPATH="$(PYTHONPATH)" \
 		nosetests --with-coverage --cover-package=instances --nologcapture --logging-clear-handlers --stop --verbosity=2 -s tests/$(kind)
 
 unit:

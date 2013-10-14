@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+import io
 import re
 import time
 import gevent
@@ -30,6 +30,10 @@ from flaskext.github import GithubAuth
 
 mod = Blueprint('views', __name__)
 
+if not settings.TESTING:
+    PNG_DATA = io.open(settings.LOCAL_FILE('static', 'img', 'stats.png'), 'rb').read()
+else:
+    PNG_DATA = 'a fake png'
 
 def json_response(data, status=200):
     return Response(json.dumps(data), mimetype="text/json", status=int(status))
@@ -213,8 +217,7 @@ def robots_txt():
     ])))
 
 
-@mod.route("/bin/<username>/<project>.svg")
-def serve_stat_svg(username, project):
+def record_stats(username, project):
     should_record = 'norecord' not in request.args
 
     user = User.using(db.engine).find_one_by(username=username)
@@ -249,11 +252,26 @@ def serve_stat_svg(username, project):
         set_key = KeyRing.for_user_project_name_set(username)
         redis.sadd(set_key, "{0}/{1}".format(username, project))
 
+
+@mod.route("/bin/<username>/<project>.svg")
+def serve_stat_svg(username, project):
+    record_stats(username, project)
     context = {
         'username': username,
         'project': project,
     }
     return Response(render_template('btn/stats.svg', **context), content_type='image/svg+xml')
+
+
+@mod.route("/bin/<username>/<project>.png")
+def serve_stat_png(username, project):
+    record_stats(username, project)
+
+    context = {
+        'username': username,
+        'project': project,
+    }
+    return Response(PNG_DATA, content_type='image/png')
 
 
 @mod.route("/bin/btn/<kind>-<username>-<project>-<size>.html")

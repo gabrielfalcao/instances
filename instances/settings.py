@@ -12,6 +12,7 @@ PORT = env.get_int('PORT', LOCAL_PORT)
 # READY TO DEPLOY
 DEBUG = PORT is LOCAL_PORT
 PRODUCTION = not DEBUG
+TESTING = env.get('TESTING', False)
 
 # Database connection URI
 DATABASE = env.get('MYSQL_URI')

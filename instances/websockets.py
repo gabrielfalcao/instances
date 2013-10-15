@@ -95,7 +95,7 @@ class StatsSender(InstancesBroadcaster):
             visitors = self.get_visitors(redis, data)
             key = "visitors"
             self.emit(key, visitors)
-            gevent.sleep(3)
+            gevent.sleep(.3)
 
     def on_repository_statistics(self, msg):
         workers = [

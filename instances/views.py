@@ -35,6 +35,7 @@ if not settings.TESTING:
 else:
     PNG_DATA = 'a fake png'
 
+
 def json_response(data, status=200):
     return Response(json.dumps(data), mimetype="text/json", status=int(status))
 

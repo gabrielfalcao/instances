@@ -65,7 +65,7 @@ $(function(){
         scope.$apply(function(){
             scope.visitors = visitors;
             for (var country_code in visitors.by_country) {
-                var inline_visitors visitors.by_country[country_code];
+                var inline_visitors = visitors.by_country[country_code];
                 var country_selector = '.path[data-code="'+country_code+'"]';
                 var $path = $(country_selector);
                 $path.removeClass("below10");
@@ -83,7 +83,7 @@ $(function(){
                     $path.addClass("below1000");
                 } else if (count > 1000 && count <=10000) {
                     $path.addClass("below10000");
-                } else (count > 10000) {
+                } else {
                     $path.addClass("above10000");
                 }
             }

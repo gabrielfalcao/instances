@@ -72,7 +72,6 @@ class StatsSender(InstancesBroadcaster):
 
         repository = repository_fetcher.get(username, project)
 
-
         key = KeyRing.for_user_project_stats_list(username, project)
         raw_visitors = redis.lrange(key, 0, 1000)
         visitors = map(json.loads, raw_visitors)

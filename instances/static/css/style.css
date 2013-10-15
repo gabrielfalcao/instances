@@ -34,9 +34,9 @@ nav {
   font-family: "Montserrat";
 }
 
+
 .main {
   min-height: 100%;
-  padding-top: 80px;
   padding-bottom:200px;
   margin-bottom: -200px;
 }
@@ -172,4 +172,19 @@ textarea.pre {
 svg.map {
   clear: both;
   margin-top: -240px;
+}
+path.country {
+  fill: rgba(183,183,183,1);
+}
+path.country.below10 {
+  fill: rgba(183,183,183,.3);
+}
+path.country.below100 {
+  fill: #EDF8B1;
+}
+path.country.below1000 {
+  fill: #7FCDBB;
+}
+path.country.below10000 {
+  fill: #2C7FB8;
 }

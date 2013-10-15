@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import math
+import colorsys
 from flask import session, g
 from pygeoip import GeoIP as PyGEOIP
 from pygeoip import GeoIPError

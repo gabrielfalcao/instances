@@ -179,18 +179,18 @@ svg.map {
 path.country {
   fill: rgba(183,183,183,1);
 }
-path.country.below10 {
+svg.map path.below10 {
   fill: rgba(183,183,183,.3);
 }
-path.country.below100 {
+svg.map path.below100 {
   fill: #EDF8B1;
 }
-path.country.below1000 {
+svg.map path.below1000 {
   fill: #7FCDBB;
 }
-path.country.below10000 {
+svg.map path.below10000 {
   fill: #2C7FB8;
 }
-path.country.above10000 {
+svg.map path.above10000 {
   fill: #0E4C78;
 }

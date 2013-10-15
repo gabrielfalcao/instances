@@ -62,31 +62,31 @@ $(function(){
         });
     });
     socket.on("visitors", function(visitors) {
+        for (var country_code in visitors.by_country) {
+            var inline_visitors = visitors.by_country[country_code];
+            var country_selector = "svg.map .country[data-code='"+country_code+"']";
+            $(country_selector).removeClass("below10");
+            $(country_selector).removeClass("below100");
+            $(country_selector).removeClass("below1000");
+            $(country_selector).removeClass("below10000");
+            var count = inline_visitors.length;
+            if (count === 0) {
+                $(country_selector).css("fill", "#F7F7F7");
+            } else if (count > 0 && count <=10) {
+                $(country_selector).attr("style", 'stroke-width: 4;fill: #484848');
+            } else if (count > 10 && count <=100) {
+                $(country_selector).attr("style", 'stroke-width: 4;fill: #EDF8B1');
+            } else if (count > 100 && count <=1000) {
+                $(country_selector).attr("style", 'stroke-width: 4;fill: #7FCDBB');
+            } else if (count > 1000 && count <=10000) {
+                $(country_selector).attr("style", 'stroke-width: 4;fill: #2C7FB8');
+            } else {
+                $(country_selector).attr("style", 'stroke-width: 4;fill: #0E4C78');
+            }
+        }
+
         scope.$apply(function(){
             scope.visitors = visitors;
-            for (var country_code in visitors.by_country) {
-                var inline_visitors = visitors.by_country[country_code];
-                var country_selector = '.path[data-code="'+country_code+'"]';
-                var $path = $(country_selector);
-                $path.removeClass("below10");
-                $path.removeClass("below100");
-                $path.removeClass("below1000");
-                $path.removeClass("below10000");
-                var count = inline_visitors.length;
-                if (count === 0) {
-                    $path.css("fill", "#F7F7F7");
-                } else if (count > 0 && count <=10) {
-                    $path.addClass("below10");
-                } else if (count > 10 && count <=100) {
-                    $path.addClass("below100");
-                } else if (count > 100 && count <=1000) {
-                    $path.addClass("below1000");
-                } else if (count > 1000 && count <=10000) {
-                    $path.addClass("below10000");
-                } else {
-                    $path.addClass("above10000");
-                }
-            }
         });
     });
     $(function(){

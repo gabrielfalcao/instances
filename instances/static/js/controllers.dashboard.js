@@ -31,7 +31,8 @@ $(function(){
                 "username": username,
                 "project": repository.name
             };
-            console.log("emit repository_statistics",  payload);
+            $(".live-stats-repository").removeClass("active");
+            $(".live-stats-repository[data-full-name='"+repository.full_name+"']").addClass("active");
             socket.emit('repository_statistics', payload);
         };
 

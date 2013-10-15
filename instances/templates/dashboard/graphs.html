@@ -1,10 +1,10 @@
 {% raw %}
-<div class="uk-grid uk-text-center sidebar-parent">
+<div class="uk-grid sidebar-parent">
   <div class="uk-width-1-6" ng-show="tracked_repositories">
     <h3>Choose a tracked repository:</h3>
     <div class="sidebar">
       <ul class="nav">
-        <li class="live-stats-repository animate-repeat" ng-repeat="repository in tracked_repositories">
+        <li data-full-name="{{ repository.full_name }}" class="live-stats-repository animate-repeat" ng-repeat="repository in tracked_repositories">
           <a ng-click="liveMonitorProject(repository)" href="#stats-{{ repository.name }}">{{ repository.full_name }}</a>
         </li>
 

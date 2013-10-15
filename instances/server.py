@@ -20,3 +20,8 @@ class SocketIOApp(object):
         return self.app.web(environ, start_response)
 
 app = SocketIOApp(App.from_env())
+
+# from OpenSSL import SSL
+# context = SSL.Context(SSL.SSLv23_METHOD)
+# context.use_privatekey_file(settings.SSL_PRIVATE_KEY_FILE)
+# context.use_certificate_file(settings.SSL_CERT_FILE)

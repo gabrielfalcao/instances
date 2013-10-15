@@ -19,9 +19,21 @@
       <div class="uk-navbar-flip">
         <ul class="uk-navbar-nav">
           {% block navbar %}
-          <li>
+            {% if github_user %}
+            <li>
+              <a href="{{ url_for('.show_settings') }}"><img src="{{ github_user.avatar_url }}" width="40" /> {{ github_user.login }}</a>
+            </li>
+            <li>
+              <a href="{{ url_for('.logout') }}">
+                <i class="uk-icon-signout uk-icon-medium">&nbsp</i>logout</a>
+            </li>
+            {% else %}
+                      <li>
             <a href="{{ url_for('.login') }}"><i class="uk-icon-github-alt"></i> Sign in with Github</a>
           </li>
+
+            {% endif %}
+
           {% endblock %}
         </ul>
       </div>

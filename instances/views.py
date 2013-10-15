@@ -5,7 +5,7 @@ import io
 import re
 import time
 import gevent
-import ejson as json
+import json
 from flask import (
     Blueprint,
     request,
@@ -127,6 +127,12 @@ def index():
 
     return render_template('index.html')
 
+
+
+@mod.route("/logout")
+def logout():
+    session.pop('github_user_data', '')
+    return redirect('/')
 
 @mod.route("/account")
 @requires_login

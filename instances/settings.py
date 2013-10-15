@@ -57,6 +57,8 @@ AUTH_PASSWD = env.get("AUTH_PASSWD", "")
 absurl = lambda *path: "{0}{1}/{2}".format(SCHEMA, DOMAIN, "/".join(path).lstrip('/'))
 BETA_USERS = [
     'gabrielfalcao',
+    'visionmedia',
+    'kennethreitz',
     'heynemann',
     'vsanta',
     'felipesilva',

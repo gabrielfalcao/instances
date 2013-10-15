@@ -1,9 +1,4 @@
 {% extends "base.html" %}
-{% block navbar %}
-<li>
-  <a href="{{ url_for('.show_settings') }}"><img src="{{ github_user.avatar_url }}" width="40" /> {{ github_user.login }}</a>
-</li>
-{% endblock %}
 
 {% block body_attributes %}ng-controller="DashboardController" data-socketaddress="{{ settings.SCHEMA }}{{ settings.DOMAIN }}" data-world-map-url="{{ url_for('.json_world_map_for_user', username=github_user.login) }}"{% endblock %}
 

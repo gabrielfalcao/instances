@@ -64,6 +64,7 @@ $(function(){
     socket.on("visitors", function(visitors) {
         scope.$apply(function(){
             scope.visitors = visitors;
+            console.log(visitors.by_country)
         });
     });
     $(function(){

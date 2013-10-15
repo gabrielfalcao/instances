@@ -73,7 +73,9 @@ $(function(){
                 $path.removeClass("below1000");
                 $path.removeClass("below10000");
                 var count = inline_visitors.length;
-                       if (count > 0 && count <=10) {
+                if (count === 0) {
+                    $path.css("fill", "#F7F7F7");
+                } else if (count > 0 && count <=10) {
                     $path.addClass("below10");
                 } else if (count > 10 && count <=100) {
                     $path.addClass("below100");
@@ -81,10 +83,9 @@ $(function(){
                     $path.addClass("below1000");
                 } else if (count > 1000 && count <=10000) {
                     $path.addClass("below10000");
-                } else if (count > 10000) {
+                } else (count > 10000) {
                     $path.addClass("above10000");
                 }
-
             }
         });
     });

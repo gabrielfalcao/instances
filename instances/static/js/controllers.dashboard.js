@@ -33,6 +33,7 @@ $(function(){
             };
             $(".live-stats-repository").removeClass("active");
             $(".live-stats-repository[data-full-name='"+repository.full_name+"']").addClass("active");
+
             socket.emit('repository_statistics', payload);
         };
 
@@ -55,6 +56,10 @@ $(function(){
     });
     socket.on('disconnect', function() {
         console.log('disconnected');
+        $(".live-stats-repository").removeClass("active");
+        scope.$apply(function(){
+            scope.visitors = null;
+        });
     });
     socket.on("visitors", function(visitors) {
         scope.$apply(function(){

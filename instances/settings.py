@@ -43,6 +43,7 @@ else:
 SCHEMA = PORT == 443 and 'https://' or "http://"
 
 absurl = lambda *path: "{0}{1}/{2}".format(SCHEMA, DOMAIN, "/".join(path).lstrip('/'))
+sslabsurl = lambda *path: "{0}{1}/{2}".format("https://", DOMAIN, "/".join(path).lstrip('/'))
 
 RELEASE = env.get('RELEASE', uuid4().hex)
 # Session key, CHANGE IT IF YOU GET TO THE PRODUCTION! :)

@@ -117,7 +117,8 @@ def inject_basics():
         github_user=session.get('github_user_data', None),
         json=json,
         len=len,
-        full_url_for=lambda *args, **kw: settings.absurl(url_for(*args, **kw))
+        full_url_for=lambda *args, **kw: settings.absurl(url_for(*args, **kw)),
+        ssl_full_url_for=lambda *args, **kw: settings.sslabsurl(url_for(*args, **kw)),
     )
 
 

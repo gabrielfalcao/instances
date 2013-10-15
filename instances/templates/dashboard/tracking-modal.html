@@ -8,7 +8,8 @@
               </div>
               <br />
               <div class="uk-panel">
-                <textarea style="width:100%" class="pre">{{ '''<img src="' + full_url_for(".serve_stat_png", username=username, project=repository.name) + '" width="95" height="18" />''' }}</textarea>
+                <textarea style="width:100%" class="pre">{{ '''<img src="' + ssl_full_url_for(".serve_stat_png", username=username, project=repository.name) + '" width="95" height="18" />''' }}</textarea>
+                <textarea style="width:100%" class="pre">{{ '''[![instanc.es Badge]' + ssl_full_url_for(".serve_stat_png", username=username, project=repository.name) + ')](http://instanc.es)''' }}</textarea>
               </div>
             </p>
             <p><h2>Tracking SVG</h2> </p>
@@ -18,7 +19,8 @@
               </div>
               <br />
               <div class="uk-panel">
-                <textarea style="width:100%" class="pre">{{ '''<img src="' + full_url_for(".serve_stat_svg", username=username, project=repository.name) + '" width="95" height="18" />''' }}</textarea>
+                <textarea style="width:100%" class="pre">{{ '''<img src="' + ssl_full_url_for(".serve_stat_svg", username=username, project=repository.name) + '" width="95" height="18" />''' }}</textarea>
+                <textarea style="width:100%" class="pre">{{ '''[![instanc.es Badge]' + ssl_full_url_for(".serve_stat_svg", username=username, project=repository.name) + ')](http://instanc.es)''' }}</textarea>
               </div>
             </p>
             {% for kind in ['watchers', 'forks', 'follow'] %}
@@ -42,7 +44,7 @@
                 <br />
                 <p>
                   <em>code:</em><br />
-                  <textarea style="width:100%;height:100px" class="pre">{{ '''<iframe src="'''+full_url_for('.serve_btn', size=size.name, project=repository.name, username=username, kind=kind)+'''" allowtransparency="true" frameborder="0" scrolling="0" width="'''+size.width+'''" height="'''+size.height+'''"></iframe>''' }}</textarea>
+                  <textarea style="width:100%;height:100px" class="pre">{{ '''<iframe src="'''+ssl_full_url_for('.serve_btn', size=size.name, project=repository.name, username=username, kind=kind)+'''" allowtransparency="true" frameborder="0" scrolling="0" width="'''+size.width+'''" height="'''+size.height+'''"></iframe>''' }}</textarea>
                 </p>
               </div>
             {% endfor %}

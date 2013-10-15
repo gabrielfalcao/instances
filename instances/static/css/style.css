@@ -163,15 +163,18 @@ textarea.pre {
   height: 300px;
 }
 .live-stats .left {
+  z-index: 100000;
   float: left;
 }
 .live-stats .right {
   float: right;
+  z-index: 100000;
+
 }
 
 svg.map {
   clear: both;
-  margin-top: -240px;
+  margin-top: -200px;
 }
 path.country {
   fill: rgba(183,183,183,1);

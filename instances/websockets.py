@@ -14,6 +14,7 @@ from instances.core import KeyRing
 from instances.models import User
 from instances import db
 from instances.api import GithubUser, GithubEndpoint, GithubRepository
+from instances.data.aggregators import VisitorAggregator
 
 
 class Namespace(BaseNamespace):
@@ -75,9 +76,11 @@ class StatsSender(InstancesBroadcaster):
         key = KeyRing.for_user_project_stats_list(username, project)
         raw_visitors = redis.lrange(key, 0, 1000)
         visitors = map(json.loads, raw_visitors)
+        aggregate_visitors = VisitorAggregator(visitors)
 
         value = {
             'visitors': visitors,
+            'by_country': aggregate_visitors.by_country(),
             'total': len(visitors),
             'repository': repository,
         }
@@ -92,7 +95,7 @@ class StatsSender(InstancesBroadcaster):
             visitors = self.get_visitors(redis, data)
             key = "visitors"
             self.emit(key, visitors)
-            gevent.sleep(.3)
+            gevent.sleep(3)
 
     def on_repository_statistics(self, msg):
         workers = [

@@ -1,26 +1,18 @@
-{% for repository_name in tracked_repositories %}
-{% set meta_id="meta-" + repository_name.replace("/", "-") %}
-{% set repository=repositories_by_name[repository_name] %}
-<script id="{{ meta_id }}" type="text/json">{{ json.dumps(repository,indent=2)|safe }}</script>{% endfor %}
-
-<div class="uk-grid sidebar-parent">
-  <div class="uk-width-1-6">
-    {% if tracked_repositories %}
+{% raw %}
+<div class="uk-grid uk-text-center sidebar-parent">
+  <div class="uk-width-1-6" ng-show="tracked_repositories">
     <h3>Choose a tracked repository:</h3>
     <div class="sidebar">
       <ul class="nav">
-      {% for repository_name in tracked_repositories %}
-        {% set meta_id="meta-" + repository_name.replace("/", "-") %}
-        {% set repository=repositories_by_name[repository_name] %}
-        <li><a class="live-stats-repository" href="#stats-{{ repository_name }}" data-meta-id="#{{ meta_id }}">{{ repository_name }}</a></li>
-      {% endfor %}
+        <li class="live-stats-repository animate-repeat" ng-repeat="repository in tracked_repositories">
+          <a ng-click="liveMonitorProject(repository)" href="#stats-{{ repository.name }}">{{ repository.full_name }}</a>
+        </li>
+
       </ul>
     </div>
   </div>
-
-  <div class="uk-width-5-6">
+  <div class="uk-width-5-6 animate-if" ng-show="tracked_repositories">
     <div class="uk-grid live-stats">
-      {% raw %}
       <div class="uk-width-1-2">
         <div ng-model="visitors" class="ng-cloak left">
           <h1>{{ visitors.repository.full_name }}</h1>
@@ -28,16 +20,15 @@
       </div>
       <div class="uk-width-1-2">
         <div ng-model="visitors" class="ng-cloak right">
-          <h2 id="overall">Total: {{ visitors.total }}</h2>
-          <h2 id="forks">Forks: {{ visitors.repository.forks }}</h2>
-          <h2 id="watchers">Watchers: {{ visitors.repository.watchers }}</h2>
+          <h2 id="overall">Visitors: {{ visitors.total }}</h2>
+          <h3 id="forks"><i class="uk-icon-github">&nbsp;</i>Forks: {{ visitors.repository.forks }}</h3>
+          <h3 id="watchers"><i class="uk-icon-github-alt">&nbsp;</i>Watchers: {{ visitors.repository.watchers }}</h3>
+          <h3 id="stars"><i class="uk-icon-star">&nbsp;</i>Stars: {{ visitors.repository.stars }}</h3>
         </div>
       </div>
-      {% endraw %}
     </div>
-    {% include "dashboard/map.svg" %}
+    {% endraw %}{% include "dashboard/map.svg" %}{% raw %}
   </div>
-  {% else %}
-  <h3>There are no tracked repositories</h3>
-  {% endif %}
+  <h1 ng-show="tracked_repositories" class="ng-hide">There are no tracked repositories</h1>
 </div>
+{% endraw %}

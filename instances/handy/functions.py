@@ -8,7 +8,21 @@ from instances import settings
 from instances.log import logger
 
 geoip = PyGEOIP(settings.GEO_IP_FILE_LOCATION)
-
+EMPTYGEO = {
+    "city": "",
+    "region_name": "",
+    "area_code": "",
+    "time_zone": "",
+    "dma_code": "",
+    "metro_code": "",
+    "country_code3": "",
+    "latitude": "",
+    "postal_code": "",
+    "longitude": "",
+    "country_code": "WORLD",
+    "country_name": "",
+    "continent": "",
+}
 
 def user_is_authenticated():
     from instances import settings
@@ -30,4 +44,4 @@ def geo_data_for_ip(ip_address):
         return geoip.record_by_addr(ip_address)
     except GeoIPError:
         logger.exception("Failed to get info for ip: %s", ip_address)
-        return None
+        return EMPTYGEO

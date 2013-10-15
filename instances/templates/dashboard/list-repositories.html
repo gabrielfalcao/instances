@@ -1,7 +1,7 @@
 <style type="text/css" media="screen">
 {% include "./btn/main.css" %}
 </style>
-<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
+<table ng-show="repositories" class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
   <thead>
     <tr>
       <th>Name</th>
@@ -12,72 +12,20 @@
     </tr>
   </thead>
   <tbody>
-    {% set username=github_user.login %}
     {% set button_sizes=[{'name': 'small', 'width': '52px', 'height': '20px'}, {'name': 'large', 'width': '152px', 'height': '30px'}] %}
-    {% for repository in repositories %}
-    <tr>
+    <tr ng-repeat="repository in repositories">
+      {% raw %}
       <td>{{ repository.name }}</td>
       <td>{{ repository.watchers }}</td>
       <td>{{ repository.forks }}</td>
       <td>{{ repository_is_being_tracked(repository) }}</td>
-      {% set modal_id="#modal-" + "-".join([username, repository.name]) %}
       <td>
-        <a href="#" data-uk-modal="{target:'{{ modal_id }}'}" class="uk-button"><i class="uk-icon-code"></i> Get tracking code</a>
-        <div id="{{ modal_id.lstrip('#') }}" class="uk-modal">
-	  <div class="uk-modal-dialog" style="height: 600px;overflow-y:auto;position:relative;">
-	    <a class="uk-modal-close uk-close"></a>
-            <p><h2>Tracking PNG</h2> </p>
-            <p>
-              <div class="uk-panel">
-                <img src="{{ full_url_for(".serve_stat_png", username=username, project=repository.name) }}?norecord" width="95" height="18" />
-              </div>
-              <br />
-              <div class="uk-panel">
-                <textarea style="width:100%" class="pre">{{ '''<img src="' + full_url_for(".serve_stat_png", username=username, project=repository.name) + '" width="95" height="18" />''' }}</textarea>
-              </div>
-            </p>
-            <p><h2>Tracking SVG</h2> </p>
-            <p>
-              <div class="uk-panel">
-                <img src="{{ full_url_for(".serve_stat_svg", username=username, project=repository.name) }}?norecord" width="95" height="18" />
-              </div>
-              <br />
-              <div class="uk-panel">
-                <textarea style="width:100%" class="pre">{{ '''<img src="' + full_url_for(".serve_stat_svg", username=username, project=repository.name) + '" width="95" height="18" />''' }}</textarea>
-              </div>
-            </p>
-            {% for kind in ['watchers', 'forks', 'follow'] %}
-            <p><h2>{{ kind.title() }}</h2> </p>
-            <div class="uk-grid">
-            {% for size in button_sizes %}
-              <div class="uk-width-1-2">
-                <p><h3>{{ size.name.title() }}</h3></p>
-                <p>
-                {% if kind == "watchers" %}
-                  {% set text="Star" %}
-                {% elif kind == "forks" %}
-                  {% set text="Fork" %}
-                {% elif kind == "follow" %}
-                  {% set text="Follow @{0}".format(username) %}
-                {% endif %}
-                  <em>demo:</em><br />
-                {% set count=repository.get(kind, 0) %}
-                {% include "./btn/btn.html" %}
-                </p>
-                <br />
-                <p>
-                  <em>code:</em><br />
-                  <textarea style="width:100%;height:100px" class="pre">{{ '''<iframe src="'''+full_url_for('.serve_btn', size=size.name, project=repository.name, username=username, kind=kind)+'''" allowtransparency="true" frameborder="0" scrolling="0" width="'''+size.width+'''" height="'''+size.height+'''"></iframe>''' }}</textarea>
-                </p>
-              </div>
-            {% endfor %}
-            </div>
-            <hr />
-          {% endfor %}
-	  </div> {#modal-dialog#}
-        </div>
+        <a href="#" ng-click="showModal(repository)" class="uk-button"><i class="uk-icon-code"></i> Get tracking code</a>
       </td>
+      {% endraw %}
     </tr>
-    {% endfor %}
   </tbody>
 </table>
+<div id="tracking-code-modal" class="uk-modal">
+  <div class="uk-modal-dialog" style="height: 600px;overflow-y:auto;position:relative;"></div>
+</div>

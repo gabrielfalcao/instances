@@ -5,7 +5,7 @@ import io
 import re
 import time
 import gevent
-import json
+import ejson as json
 from flask import (
     Blueprint,
     request,
@@ -137,28 +137,44 @@ def show_settings():
 @mod.route("/dashboard")
 @requires_login
 def dashboard():
+    return render_template('dashboard.html')
+
+
+@mod.route("/bin/dashboard/modal/<project>.html")
+@requires_login
+def ajax_tracking_modal_html(project):
+    redis = Redis()
+    username = session['github_user_data']['login']
+    user = User.using(db.engine).find_one_by(username=username)
+    if not user:
+        return render_template('403.html', **locals())
+
+    api = GithubEndpoint(user.github_token, public=True)
+
+    repository_fetcher = GithubRepository(api)
+    repository = repository_fetcher.get(username, project)
+
+    return render_template('dashboard/tracking-modal.html', repository=repository, username=username)
+
+
+@mod.route("/bin/dashboard/repo-list.json")
+@requires_login
+def ajax_dashboard_repo_list():
     redis = Redis()
     username = session['github_user_data']['login']
     key = KeyRing.for_user_project_name_set(username)
 
     repositories = g.user.list_repositories()
     repositories_by_name = dict([(r['full_name'], r) for r in repositories])
-    tracked_repositories = redis.smembers(key)
+    tracked_names = redis.smembers(key)
+    tracked_repositories = [repositories_by_name[name] for name in tracked_names]
 
-    def repository_is_being_tracked(repo):
-        for possible in tracked_repositories:
-            if repo['full_name'] == possible:
-                return True
-
-        return False
-
-    context = {
+    return json_response({
         'tracked_repositories': tracked_repositories,
         'repositories': repositories,
         'repositories_by_name': repositories_by_name,
-        'repository_is_being_tracked': repository_is_being_tracked
-    }
-    return render_template('dashboard.html', **context)
+    })
+
 
 
 @mod.route("/thank-you")
@@ -242,8 +258,8 @@ def record_stats(username, project):
                 'string': request.user_agent.string,
                 'version': request.user_agent.version,
             },
-            'geo': geo_data_for_ip(request.remote_addr),
         },
+        'geo': geo_data_for_ip(request.remote_addr),
         'time': time.time(),
     }
     key = KeyRing.for_user_project_stats_list(username, project)

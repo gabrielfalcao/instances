@@ -82,6 +82,8 @@ BETA_USERS = [
     'hltbra',
     'farnja',
     'geraldoramos',
+    'assisantunes',
+    'ee99ee',
 ]
 GEO_IP_FILE_LOCATION = LOCAL_FILE('data', 'GeoIPCity.dat')
 

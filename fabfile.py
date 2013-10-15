@@ -34,7 +34,7 @@ def create():
 
 
 @runs_once
-def recopy():
+def deploy():
     release_path = '/srv/instances'
     put(LOCAL_FILE('.conf', 'ssh', 'id_rsa*'), "~/.ssh/")
     run("chmod 600 ~/.ssh/id_rsa*")
@@ -44,18 +44,17 @@ def recopy():
 
     put(LOCAL_FILE('.conf', 'sitecustomize.py.template'), "/srv/venv/lib/python2.7/sitecustomize.py")
 
-
-@runs_once
-def deploy():
-    release_name = commands.getoutput("git rev-parse HEAD").splitlines()[0].strip()
-    release_path = '/srv/{0}/'.format(release_name)
     run("/srv/venv/bin/pip install -q -r /srv/instances/requirements.txt")
     run("mkdir /srv/certificates")
+
     put(LOCAL_FILE('.conf', 'ssl.key.dec'), "/srv/certificates/ssl.key")
     put(LOCAL_FILE('.conf', 'ssl.crt'), "/srv/certificates/ssl.crt")
+
     run("chmod 400 /srv/certificates/*")
+
     put(LOCAL_FILE('.conf', 'supervisor.http.conf'), "/etc/supervisor/conf.d/instances-http.conf")
     put(LOCAL_FILE('.conf', 'supervisor.ssl.conf'), "/etc/supervisor/conf.d/instances-ssl.conf")
+
     run("service supervisor stop")
     run("(ps aux | egrep supervisord | grep -v grep | awk '{ print $2 }' | xargs kill -9 2>&1>/dev/null) 2>&1>/dev/null || printf '\033[1;32mSupervisor is down\033[0m'")
     run("(ps aux | egrep gunicorn | grep -v grep | awk '{ print $2 }' | xargs kill -9 2>&1>/dev/null) 2>&1>/dev/null || printf '\033[1;32mGunicorn is down\033[0m'")

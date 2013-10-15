@@ -140,6 +140,12 @@ def dashboard():
     return render_template('dashboard.html')
 
 
+@mod.route("/email")
+@requires_login
+def email():
+    return render_template('email/thankyou.html')
+
+
 @mod.route("/bin/dashboard/modal/<project>.html")
 @requires_login
 def ajax_tracking_modal_html(project):

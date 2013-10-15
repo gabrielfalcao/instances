@@ -191,3 +191,6 @@ path.country.below1000 {
 path.country.below10000 {
   fill: #2C7FB8;
 }
+path.country.above10000 {
+  fill: #0E4C78;
+}

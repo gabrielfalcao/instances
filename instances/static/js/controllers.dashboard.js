@@ -64,7 +64,28 @@ $(function(){
     socket.on("visitors", function(visitors) {
         scope.$apply(function(){
             scope.visitors = visitors;
-            console.log(visitors.by_country)
+            for (var country_code in visitors.by_country) {
+                var inline_visitors visitors.by_country[country_code];
+                var country_selector = '.path[data-code="'+country_code+'"]';
+                var $path = $(country_selector);
+                $path.removeClass("below10");
+                $path.removeClass("below100");
+                $path.removeClass("below1000");
+                $path.removeClass("below10000");
+                var count = inline_visitors.length;
+                       if (count > 0 && count <=10) {
+                    $path.addClass("below10");
+                } else if (count > 10 && count <=100) {
+                    $path.addClass("below100");
+                } else if (count > 100 && count <=1000) {
+                    $path.addClass("below1000");
+                } else if (count > 1000 && count <=10000) {
+                    $path.addClass("below10000");
+                } else if (count > 10000) {
+                    $path.addClass("above10000");
+                }
+
+            }
         });
     });
     $(function(){

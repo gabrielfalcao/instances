@@ -10,6 +10,10 @@ class VisitorAggregator(object):
     def by_country(self):
         results = defaultdict(list)
         for v in sorted(self.visitors, key=lambda v: v['time']):
+            geo = v.get('geo')
+            if not isinstance(geo, dict):
+                continue
+
             code = v['geo']['country_code']
             results[code].append(v)
 

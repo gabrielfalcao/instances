@@ -31,6 +31,7 @@ $(function(){
                 "username": username,
                 "project": repository.name
             };
+            console.log("emit repository_statistics",  payload);
             socket.emit('repository_statistics', payload);
         };
 
@@ -55,7 +56,6 @@ $(function(){
         console.log('disconnected');
     });
     socket.on("visitors", function(visitors) {
-        console.log('visitors', visitors);
         scope.$apply(function(){
             scope.visitors = visitors;
         });

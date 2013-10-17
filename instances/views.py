@@ -110,7 +110,6 @@ def github_callback(resp):
 
     g.user = User.get_or_create_from_github_user(github_user_data)
     session['github_user_data'] = github_user_data
-    gevent.spawn(get_events_for_user, args=(token, github_user_data))
     return redirect(next_url)
 
 

@@ -79,10 +79,12 @@ $(function(){
             colors.push(current_color);
             var total = inline_visitors.length;
             $(country_selector).attr("style", 'stroke-width: 4;fill: ' + current_color);
-            console.log(visitors)
-            var tooltip_text = visitors.geo.country_name + " - " + total + " visitors";
-            console.log(tooltip_text);
-            $(country_selector).attr("original-title", tooltip_text);
+            try {
+                var tooltip_text = inline_visitors[0].geo.country_name + " - " + total + " visitors";
+                $(country_selector).attr("original-title", tooltip_text);
+            } catch (e){
+                console.log("Error on tooltip", e);
+            }
         }
 
         scope.$apply(function(){

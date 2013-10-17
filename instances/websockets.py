@@ -16,6 +16,7 @@ from instances import db
 from instances.api import GithubUser, GithubEndpoint, GithubRepository
 from instances.data.aggregators import VisitorAggregator
 
+redis = Redis()
 
 class Namespace(BaseNamespace):
     def __init__(self, *args, **kw):
@@ -83,6 +84,8 @@ class StatsSender(InstancesBroadcaster):
             'by_country': aggregate_visitors.by_country(),
             'total': len(visitors),
             'repository': repository,
+            'full_name': "{0}/{1}".format(username, project),
+            'meta': data,
         }
         return value
 
@@ -90,7 +93,6 @@ class StatsSender(InstancesBroadcaster):
         if not isinstance(data, dict) or data.keys() != ["username", "project"]:
             return
 
-        redis = Redis()
         while self.should_live():
             visitors = self.get_visitors(redis, data)
             key = "visitors"

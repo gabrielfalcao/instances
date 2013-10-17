@@ -35,8 +35,6 @@ if not settings.TESTING:
 else:
     PNG_DATA = 'a fake png'
 
-redis = Redis()
-
 def json_response(data, status=200):
     return Response(json.dumps(data), mimetype="text/json", status=int(status))
 
@@ -84,6 +82,7 @@ def get_github_token(token=None):
 def get_events_for_user(token, github_user_data):
     api = GithubEndpoint(user.github_token, public=True)
     response = api.retrieve("/events")
+    redis = Redis()
     redis.lpush("events-{login}".format(**github_user_data), response)
 
 
@@ -185,6 +184,7 @@ def ajax_dashboard_repo_list():
     repositories = g.user.list_repositories()
 
     repositories_by_name = dict([(r['full_name'], r) for r in repositories])
+    redis = Redis()
     tracked_names = redis.smembers(key)
     tracked_repositories = [repositories_by_name[name] for name in tracked_names]
 
@@ -205,6 +205,7 @@ def thank_you():
     is_potential_donor = session['subscription_is_donor']
 
     key = DONOR_SET_KEYS[is_potential_donor]
+    redis = Redis()
     total_subscribers = redis.scard(key)
 
     context = {
@@ -233,6 +234,7 @@ def subscribe():
     key = DONOR_SET_KEYS[is_potential_donor]
     value = json.dumps(data)
 
+    redis = Redis()
     redis.sadd(key, value)
 
     session['subscription_email'] = email
@@ -280,6 +282,7 @@ def record_stats(username, project):
     }
     key = KeyRing.for_user_project_stats_list(username, project)
     value = json.dumps(data)
+    redis = Redis()
     redis.rpush(key, value)
     set_key = KeyRing.for_user_project_name_set(username)
     redis.sadd(set_key, "{0}/{1}".format(username, project))

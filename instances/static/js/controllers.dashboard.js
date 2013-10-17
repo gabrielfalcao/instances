@@ -71,6 +71,7 @@ $(function(){
                       "#7FCDBB",
                       "#2C7FB8",
                       "#0E4C78"]
+        $("svg.map .country").attr("style", 'stroke-width: 4;fill: #484848';
 
         for (var country_code in visitors.by_country) {
             var inline_visitors = visitors.by_country[country_code];

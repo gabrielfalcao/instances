@@ -1,4 +1,4 @@
-var APP = angular.module('Instances', []).
+var APP = angular.module('instances', []).
     filter('dashify', function() {
         return function(input) {
             return input.replace("/", "-");
@@ -67,27 +67,17 @@ $(function(){
         });
     });
     socket.on("visitors", function(visitors) {
+        var colors = ["#EDF8B1",
+                      "#7FCDBB",
+                      "#2C7FB8",
+                      "#0E4C78"]
+
         for (var country_code in visitors.by_country) {
             var inline_visitors = visitors.by_country[country_code];
             var country_selector = "svg.map .country[data-code='"+country_code+"']";
-            $(country_selector).removeClass("below10");
-            $(country_selector).removeClass("below100");
-            $(country_selector).removeClass("below1000");
-            $(country_selector).removeClass("below10000");
-            var count = inline_visitors.length;
-            if (count === 0) {
-                $(country_selector).css("fill", "#F7F7F7");
-            } else if (count > 0 && count <=10) {
-                $(country_selector).attr("style", 'stroke-width: 4;fill: #484848');
-            } else if (count > 10 && count <=100) {
-                $(country_selector).attr("style", 'stroke-width: 4;fill: #EDF8B1');
-            } else if (count > 100 && count <=1000) {
-                $(country_selector).attr("style", 'stroke-width: 4;fill: #7FCDBB');
-            } else if (count > 1000 && count <=10000) {
-                $(country_selector).attr("style", 'stroke-width: 4;fill: #2C7FB8');
-            } else {
-                $(country_selector).attr("style", 'stroke-width: 4;fill: #0E4C78');
-            }
+            var current_color = colors.shift();
+            colors.push(current_color);
+            $(country_selector).attr("style", 'stroke-width: 4;fill: ' + current_color);
         }
 
         scope.$apply(function(){

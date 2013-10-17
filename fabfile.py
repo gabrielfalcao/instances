@@ -48,7 +48,7 @@ def deploy():
     put(LOCAL_FILE('.conf', 'sitecustomize.py.template'), "/srv/venv/lib/python2.7/sitecustomize.py")
 
     run("/srv/venv/bin/pip install -q curdling")
-    run("/srv/venv/bin/curd install -r /srv/instances/requirements.txt")
+    run("/srv/venv/bin/curd -l DEBUG --log-name=curdling --log-file=/var/log/curdling.log install -r /srv/instances/requirements.txt")
     run("mkdir -p /srv/certificates")
 
     put(LOCAL_FILE('.conf', 'ssl.key.dec'), "/srv/certificates/ssl.key")

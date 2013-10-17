@@ -23,10 +23,13 @@ $(function(){
     function make_loader(icon_name){
         return '<div class="uk-grid uk-text-center modal-loader"><div class="uk-width-1-1 " style="padding-top: 200px;%"><h2>loading...</h2><i class="uk-icon-'+icon_name+' uk-icon-large uk-icon-spin"></i></div></div>';
     }
+
     scope.$apply(function(){
         scope.visitors = {};
+        scope.current_project = false;
         scope.username = username;
         scope.liveMonitorProject = function(repository){
+            scope.current_project = repository.full_name;
             var payload = {
                 "username": username,
                 "project": repository.name
@@ -35,6 +38,7 @@ $(function(){
             $(".live-stats-repository[data-full-name='"+repository.full_name+"']").addClass("active");
 
             socket.emit('repository_statistics', payload);
+
         };
 
         scope.showModal = function(repository){
@@ -46,6 +50,7 @@ $(function(){
             $.get(get_modal_url(repository), function(html){
                 $(selector).html(html);
             })
+
         };
     });
     socket.on('connect', function() {
@@ -87,6 +92,11 @@ $(function(){
 
         scope.$apply(function(){
             scope.visitors = visitors;
+            if (visitors.repository.full_name === scope.current_project) {
+                socket.emit("repository_statistics", visitors.original_payload);
+                return;
+            }
+
         });
     });
     $(function(){
@@ -103,4 +113,5 @@ $(function(){
 });
 
 APP.controller("DashboardController", function($scope){
+
 });

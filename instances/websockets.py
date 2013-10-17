@@ -19,17 +19,6 @@ from instances.data.aggregators import VisitorAggregator
 redis = Redis()
 
 class Namespace(BaseNamespace):
-    def __init__(self, *args, **kw):
-        super(Namespace, self).__init__(*args, **kw)
-        self.app = Semaphore()
-        self.app.acquire()
-
-    def on_stop(self, msg):
-        self.app.release()
-
-    def should_live(self):
-        return self.app.locked()
-
     def humanized_now(self):
         return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -84,8 +73,7 @@ class StatsSender(InstancesBroadcaster):
             'by_country': aggregate_visitors.by_country(),
             'total': len(visitors),
             'repository': repository,
-            'full_name': "{0}/{1}".format(username, project),
-            'meta': data,
+            'original_payload': data,
         }
         return value
 
@@ -93,11 +81,9 @@ class StatsSender(InstancesBroadcaster):
         if not isinstance(data, dict) or data.keys() != ["username", "project"]:
             return
 
-        while self.should_live():
-            visitors = self.get_visitors(redis, data)
-            key = "visitors"
-            self.emit(key, visitors)
-            gevent.sleep(.3)
+        visitors = self.get_visitors(redis, data)
+        key = "visitors"
+        self.emit(key, visitors)
 
     def on_repository_statistics(self, msg):
         workers = [

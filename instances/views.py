@@ -35,6 +35,7 @@ if not settings.TESTING:
 else:
     PNG_DATA = 'a fake png'
 
+redis = Redis()
 
 def json_response(data, status=200):
     return Response(json.dumps(data), mimetype="text/json", status=int(status))
@@ -80,6 +81,11 @@ def add_message(message, error=None):
 def get_github_token(token=None):
     return session.get('github_token', token)  # might bug
 
+def get_events_for_user(token, github_user_data):
+    api = GithubEndpoint(user.github_token, public=True)
+    response = api.retrieve("/events")
+    redis.lpush("events-{login}".format(**github_user_data), response)
+
 
 @mod.route('/.sys/callback')
 @github.authorized_handler
@@ -105,7 +111,7 @@ def github_callback(resp):
 
     g.user = User.get_or_create_from_github_user(github_user_data)
     session['github_user_data'] = github_user_data
-
+    gevent.spawn(get_events_for_user, args=(token, github_user_data))
     return redirect(next_url)
 
 
@@ -157,7 +163,6 @@ def email():
 @mod.route("/bin/dashboard/modal/<project>.html")
 @requires_login
 def ajax_tracking_modal_html(project):
-    redis = Redis()
     username = session['github_user_data']['login']
     user = User.using(db.engine).find_one_by(username=username)
     if not user:
@@ -174,11 +179,11 @@ def ajax_tracking_modal_html(project):
 @mod.route("/bin/dashboard/repo-list.json")
 @requires_login
 def ajax_dashboard_repo_list():
-    redis = Redis()
     username = session['github_user_data']['login']
     key = KeyRing.for_user_project_name_set(username)
 
     repositories = g.user.list_repositories()
+
     repositories_by_name = dict([(r['full_name'], r) for r in repositories])
     tracked_names = redis.smembers(key)
     tracked_repositories = [repositories_by_name[name] for name in tracked_names]
@@ -195,8 +200,6 @@ def ajax_dashboard_repo_list():
 def thank_you():
     if not ('subscription_email' in session and 'subscription_is_donor' in session):
         return redirect('/')
-
-    redis = Redis()
 
     email = session['subscription_email']
     is_potential_donor = session['subscription_is_donor']
@@ -230,7 +233,6 @@ def subscribe():
     key = DONOR_SET_KEYS[is_potential_donor]
     value = json.dumps(data)
 
-    redis = Redis()
     redis.sadd(key, value)
 
     session['subscription_email'] = email
@@ -278,7 +280,6 @@ def record_stats(username, project):
     }
     key = KeyRing.for_user_project_stats_list(username, project)
     value = json.dumps(data)
-    redis = Redis()
     redis.rpush(key, value)
     set_key = KeyRing.for_user_project_name_set(username)
     redis.sadd(set_key, "{0}/{1}".format(username, project))

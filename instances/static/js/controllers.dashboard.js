@@ -77,7 +77,12 @@ $(function(){
             var country_selector = "svg.map .country[data-code='"+country_code+"']";
             var current_color = colors.shift();
             colors.push(current_color);
+            var total = inline_visitors.length;
             $(country_selector).attr("style", 'stroke-width: 4;fill: ' + current_color);
+            console.log(visitors)
+            var tooltip_text = visitors.geo.country_name + " - " + total + " visitors";
+            console.log(tooltip_text);
+            $(country_selector).attr("original-title", tooltip_text);
         }
 
         scope.$apply(function(){

@@ -9,7 +9,7 @@
               <br />
               <div class="uk-panel">
                 <textarea style="width:100%" class="pre">{{ '''<img src="' + ssl_full_url_for(".serve_stat_png", username=username, project=repository.name) + '" width="95" height="18" />''' }}</textarea>
-                <textarea style="width:100%" class="pre">{{ '''[![instanc.es Badge]' + ssl_full_url_for(".serve_stat_png", username=username, project=repository.name) + ')](http://instanc.es)''' }}</textarea>
+                <textarea style="width:100%" class="pre">{{ '''[![instanc.es Badge](' + ssl_full_url_for(".serve_stat_png", username=username, project=repository.name) + ')](http://instanc.es)''' }}</textarea>
               </div>
             </p>
             <p><h2>Tracking SVG</h2> </p>
@@ -20,7 +20,7 @@
               <br />
               <div class="uk-panel">
                 <textarea style="width:100%" class="pre">{{ '''<img src="' + ssl_full_url_for(".serve_stat_svg", username=username, project=repository.name) + '" width="95" height="18" />''' }}</textarea>
-                <textarea style="width:100%" class="pre">{{ '''[![instanc.es Badge]' + ssl_full_url_for(".serve_stat_svg", username=username, project=repository.name) + ')](http://instanc.es)''' }}</textarea>
+                <textarea style="width:100%" class="pre">{{ '''[![instanc.es Badge](' + ssl_full_url_for(".serve_stat_svg", username=username, project=repository.name) + ')](http://instanc.es)''' }}</textarea>
               </div>
             </p>
             {% for kind in ['watchers', 'forks', 'follow'] %}

@@ -85,6 +85,4 @@ sync:
 	@make deploy
 
 redis-dump:
-	@echo "[" > dump.json
-	@ssh root@instanc.es redis-cli --raw lrange list:stats:github:gabrielfalcao/HTTPretty 0 100 | gsed 's/[{]"geo/,\n{"geo/g' >> dump.json
-	@printf "]" >> dump.json
+	@scp instanc.es:/var/lib/redis/* .

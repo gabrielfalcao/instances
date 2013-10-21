@@ -300,7 +300,6 @@ def serve_stat_svg(username, project):
 @mod.route("/bin/<username>/<project>.png")
 def serve_stat_png(username, project):
     record_stats(username, project)
-
     context = {
         'username': username,
         'project': project,
@@ -311,14 +310,6 @@ def serve_stat_png(username, project):
 @mod.route("/bin/btn/<kind>-<username>-<project>-<size>.html")
 def serve_btn(kind, username, project, size):
     user = User.using(db.engine).find_one_by(username=username)
-    if not user or kind not in ['watchers', 'forks', 'follow']:
-        return render_template('wrong-button.html', **locals())
-
-    api = GithubEndpoint(user.github_token, public=True)
-    repository_fetcher = GithubRepository(api)
-
-    repository = repository_fetcher.get(username, project)
-
     size_meta = {
         'width': '52px',
         'height': '20px',
@@ -327,6 +318,18 @@ def serve_btn(kind, username, project, size):
     if size == 'large':
         size_meta['width'] = '152px'
         size_meta['height'] = '30px'
+    if not user or kind not in ['watchers', 'forks', 'follow']:
+        return render_template('wrong-button.html', **{
+            'username': username,
+            'project': project,
+            'size': size_meta,
+        })
+
+    api = GithubEndpoint(user.github_token, public=True)
+    repository_fetcher = GithubRepository(api)
+
+    repository = repository_fetcher.get(username, project)
+
     count = repository.get(kind, 0)
 
     TEXTS = {

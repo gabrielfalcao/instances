@@ -55,11 +55,14 @@ class User(Model):
     @classmethod
     def create_from_github_user(cls, data):
         login = data.get('login')
+        fallback_email = "{0}@instanc.es".format(login)
+        email = data.get('email', fallback_email) or fallback_email
+
         instance = cls.create(
             username=login,
             github_id=data.get('id'),
             gravatar_id=data.get('gravatar_id'),
-            email=data.get('email', "{0}@instances.com".format(login)),
+            email=email,
             github_token=data.get('github_token')
         )
         logger.info("user %d created: %s", instance.id, instance.email)
@@ -67,7 +70,9 @@ class User(Model):
 
     @classmethod
     def get_or_create_from_github_user(cls, data):
-        instance = cls.find_one_by(username=data['login'])
+        login = data.get('login')
+        instance = cls.find_one_by(username=login)
+        fallback_email = "{0}@instanc.es".format(login)
 
         if not instance:
             instance = cls.create_from_github_user(data)

@@ -46,8 +46,7 @@ class GithubEndpoint(object):
     def create_cache_object(self, response):
         key = self.key(response['url'])
         content = json.dumps(response)
-        self.redis.set(key, content)
-        #self.redis.expire(key, self.TIMEOUT)
+        self.redis.setex(key, content, self.TIMEOUT)
 
     def get_from_cache(self, path, headers, data=None):
         url = self.full_url(path)

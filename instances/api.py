@@ -28,11 +28,10 @@ class GithubEndpoint(object):
         return url
 
     def find_cache_object(self, url):
-        self.log.info("GET from CACHE %s at %s", url, str(time.time()))
-
         key = self.key(url)
         data = self.redis.get(key)
         if data:
+            self.log.info("GET from CACHE %s at %s", url, str(time.time()))
             return json.loads(data)
 
     def key(self, url):

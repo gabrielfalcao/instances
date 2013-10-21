@@ -15,6 +15,7 @@ from instances.models import User
 from instances import db
 from instances.api import GithubUser, GithubEndpoint, GithubRepository
 from instances.data.aggregators import VisitorAggregator
+from instances.data.filters import VisitorFilter
 
 redis = Redis()
 
@@ -67,11 +68,17 @@ class StatsSender(InstancesBroadcaster):
         raw_visitors = redis.lrange(key, 0, 1000)
         visitors = map(json.loads, raw_visitors)
         aggregate_visitors = VisitorAggregator(visitors)
-
+        unique_visitors = VisitorFilter(visitors).by_unique_by_ip()
+        aggregate_unique_visitors = VisitorAggregator(visitors)
         value = {
             'visitors': visitors,
+            'unique_visitors': unique_visitors,
             'by_country': aggregate_visitors.by_country(),
+            'unique_by_country': aggregate_unique_visitors.by_country(),
+            'by_day': aggregate_visitors.by_day(),
+            'unique_by_day': aggregate_unique_visitors.by_day(),
             'total': len(visitors),
+            'unique_total': len(unique_visitors),
             'repository': repository,
             'original_payload': data,
         }

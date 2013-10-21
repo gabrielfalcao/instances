@@ -20,7 +20,8 @@
       </div>
       <div class="uk-width-1-2">
         <div ng-model="visitors" class="ng-cloak right">
-          <h2 id="overall">Visitors: {{ visitors.total }}</h2>
+          <h2 id="overall">Total visitors: {{ visitors.total }}</h2>
+          <h2 id="overall">Unique visitors: {{ visitors.unique_total }}</h2>
           <h3 id="forks"><i class="uk-icon-github">&nbsp;</i>Forks: {{ visitors.repository.forks }}</h3>
           <h3 id="watchers"><i class="uk-icon-github-alt">&nbsp;</i>Watchers: {{ visitors.repository.watchers }}</h3>
         </div>

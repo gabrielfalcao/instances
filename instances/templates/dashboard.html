@@ -46,6 +46,8 @@
 {% endblock %}
 
 {% block jsbottom %}
-  {% include "jsbottom.html" %}
+  {{ super() }}
+  <script src="{{ url_for('static', v=settings.RELEASE, filename='js/d3.min.js') }}"></script>
+  <script src="{{ url_for('static', v=settings.RELEASE, filename='js/nvd3.min.js') }}"></script>
   <script src="{{ url_for('static', v=settings.RELEASE, filename='js/controllers.dashboard.js') }}"></script>
 {% endblock %}

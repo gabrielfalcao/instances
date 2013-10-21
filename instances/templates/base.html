@@ -65,7 +65,11 @@
       ga('send', 'pageview');
       </script>
     {% block jsbottom %}
-      {% include "jsbottom.html" %}
+      <script src="{{ url_for('static', v=settings.RELEASE, filename='js/jquery.min.js') }}"></script>
+      <script src="{{ url_for('static', v=settings.RELEASE, filename='js/uikit.min.js') }}"></script>
+      <script src="{{ url_for('static', v=settings.RELEASE, filename='js/angular.min.js') }}"></script>
+      <script src="{{ url_for('static', v=settings.RELEASE, filename='js/socket.io.min.js') }}"></script>
+      <script src="{{ url_for('static', v=settings.RELEASE, filename='js/jquery.tipsy.js') }}"></script>
     {% endblock %}
   </body>
 </html>

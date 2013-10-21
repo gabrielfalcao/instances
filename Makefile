@@ -85,4 +85,4 @@ sync:
 	@make deploy
 
 redis-dump:
-	@scp instanc.es:/var/lib/redis/* .
+	@scp root@instanc.es:/var/lib/redis/*  /usr/local/var/db/redis/

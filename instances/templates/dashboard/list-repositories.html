@@ -13,7 +13,7 @@
   </thead>
   <tbody>
     {% set button_sizes=[{'name': 'small', 'width': '52px', 'height': '20px'}, {'name': 'large', 'width': '152px', 'height': '30px'}] %}
-    <tr ng-repeat="repository in repositories">
+    <tr ng-repeat="repository in repositories['{{ github_user.login }}']">
       {% raw %}
       <td>{{ repository.name }}</td>
       <td>{{ repository.watchers }}</td>

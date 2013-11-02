@@ -6,64 +6,240 @@
     <meta name="robots" content="noindex">
     <meta name="google-site-verification" content="kSIvUEvvttuo56hQ7f3nDkNppB-BhuiojDz4cdZhXn4" />
     {% block csshead %}
-    <link href="{{ static_url('css/uikit.min.css') }}" rel="stylesheet" />
-    <link href="{{ static_url('css/simple-map-d3.css') }}" rel="stylesheet" />
-    <link href="{{ static_url('css/style.css') }}" rel="stylesheet" />
+    <link href="{{ static_url('css/application.min.css') }}" rel="stylesheet" />
     {% endblock %}
     {% block jshead %}
     <script src="{{ static_url('js/prefixfree.min.js') }}"></script>
     {% endblock %}
   </head>
-  <body {% block body_attributes %}{% endblock %}>
-    <nav class="uk-navbar mm-navbar">
-      <a class="uk-navbar-brand" href="{{ url_for('.index') }}">instanc.es</a>
-      <div class="uk-navbar-flip">
-        <ul class="uk-navbar-nav">
+  <body class="background-dark" {% block body_attributes %}{% endblock %}>
+    <div class="logo">
+      <h4><a href="index.html">Instanc<strong>es</strong></a></h4>
+    </div>
+
+    <nav id="sidebar" class="sidebar nav-collapse collapse">
+      <ul id="side-nav" class="side-nav">
           {% block navbar %}
             {% if github_user %}
-            <li>
-              <a href="{{ url_for('.show_settings') }}"><img src="{{ github_user.avatar_url }}" width="40" /> {{ github_user.login }}</a>
-            </li>
-            <li>
-              <a href="{{ url_for('.logout') }}">
-                <i class="uk-icon-signout uk-icon-medium">&nbsp</i>logout</a>
-            </li>
+        <li>
+          <a href="{{ url_for('.show_settings') }}"><img src="{{ github_user.avatar_url }}" width="40" /> {{ github_user.login }}</a>
+        </li>
+        <li>
+          <a href="{{ url_for('.logout') }}">
+            <i class="uk-icon-signout uk-icon-medium">&nbsp</i>logout</a>
+        </li>
             {% else %}
-                      <li>
-            <a href="{{ url_for('.login') }}"><i class="uk-icon-github-alt"></i> Sign in with Github</a>
-          </li>
-
-            {% endif %}
-
-          {% endblock %}
-        </ul>
+        <li>
+          <a href="{{ url_for('.login') }}"><i class="uk-icon-github-alt"></i> Sign in with Github</a>
+        </li>
+      </ul>
+      <div id="sidebar-settings" class="settings">
+        <button type="button"
+                data-value="icons"
+                class="btn-icons btn btn-transparent btn-sm">Icons</button>
+        <button type="button"
+                data-value="auto"
+                class="btn-auto btn btn-transparent btn-sm">Auto</button>
       </div>
     </nav>
-    {% block main %}
-      {% endblock %}
-      <div class="uk-grid footer">
-        <div class="uk-container uk-container-center uk-text-center">
-	  <ul class="uk-subnav uk-subnav-line">
-	    <li><h1>Instanc.es</h1></li>
-	  </ul>
-	  <ul class="uk-subnav uk-subnav-line">
-	    <li><a href="http://github.com/gabrielfalcao">Github</a></li>
-	    <li><a href="http://twitter.com/gabrielfalcao">Twitter</a></li>
-	  </ul>
-	  <div class="uk-panel">
-	    <p>&copy; Copyright 2013 Instanc.es</p>
-	    <p>Made with &hearts; in Brooklyn</p>
-	  </div>
+            {% endif %}
+          {% endblock %}
+    <div class="wrap">
+      <header class="page-header">
+        <div class="navbar">
+          <ul class="nav navbar-nav navbar-right pull-right">
+            <li class="visible-phone-landscape">
+              <a href="#" id="search-toggle">
+                <i class="icon-search"></i>
+              </a>
+            </li>
+            <li class="dropdown">
+              <a href="#" title="Messages" id="messages"
+                 class="dropdown-toggle"
+                 data-toggle="dropdown">
+                <i class="icon-comments"></i>
+              </a>
+              <ul id="messages-menu" class="dropdown-menu messages" role="menu">
+                <li role="presentation">
+                  <a href="#" class="message">
+                    <img src="img/1.jpg" alt="">
+                    <div class="details">
+                      <div class="sender">Jane Hew</div>
+                      <div class="text">
+                                            Hey, John! How is it going? ...
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a href="#" class="message">
+                    <img src="img/2.jpg" alt="">
+                    <div class="details">
+                      <div class="sender">Alies Rumiancaŭ</div>
+                      <div class="text">
+                                            I'll definitely buy this template
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a href="#" class="message">
+                    <img src="img/3.jpg" alt="">
+                    <div class="details">
+                      <div class="sender">Michał Rumiancaŭ</div>
+                      <div class="text">
+                                            Is it really Lore ipsum? Lore ...
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a href="#" class="text-align-center see-all">
+                                    See all messages <i class="icon-arrow-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" title="8 support tickets"
+                 class="dropdown-toggle"
+                 data-toggle="dropdown">
+                <i class="icon-group"></i>
+                <span class="count">8</span>
+              </a>
+              <ul id="support-menu" class="dropdown-menu support" role="menu">
+                <li role="presentation">
+                  <a href="#" class="support-ticket">
+                    <div class="picture">
+                      <span class="label label-important"><i class="icon-bell-alt"></i></span>
+                    </div>
+                    <div class="details">
+                                        Check out this awesome ticket
+                    </div>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a href="#" class="support-ticket">
+                    <div class="picture">
+                      <span class="label label-warning"><i class="icon-question-sign"></i></span>
+                    </div>
+                    <div class="details">
+                                        "What is the best way to get ...
+                    </div>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a href="#" class="support-ticket">
+                    <div class="picture">
+                      <span class="label label-success"><i class="icon-tag"></i></span>
+                    </div>
+                    <div class="details">
+                                        This is just a simple notification
+                    </div>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a href="#" class="support-ticket">
+                    <div class="picture">
+                      <span class="label label-info"><i class="icon-info-sign"></i></span>
+                    </div>
+                    <div class="details">
+                                        12 new orders has arrived today
+                    </div>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a href="#" class="support-ticket">
+                    <div class="picture">
+                      <span class="label label-important"><i class="icon-plus"></i></span>
+                    </div>
+                    <div class="details">
+                                        One more thing that just happened
+                    </div>
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a href="#" class="text-align-center see-all">
+                                    See all tickets <i class="icon-arrow-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="divider"></li>
+            <li class="hidden-xs">
+              <a href="#" id="settings"
+                 title="Settings"
+                 data-toggle="popover"
+                 data-placement="bottom">
+                <i class="icon-cog"></i>
+              </a>
+            </li>
+            <li class="hidden-xs dropdown">
+              <a href="#" title="Account" id="account"
+                 class="dropdown-toggle"
+                 data-toggle="dropdown">
+                <i class="icon-user"></i>
+              </a>
+              <ul id="account-menu" class="dropdown-menu account" role="menu">
+                <li role="presentation" class="account-picture">
+                  <img src="img/2.jpg" alt="">
+                                Philip Daineka
+                </li>
+                <li role="presentation">
+                  <a href="form_account.html" class="link">
+                    <i class="icon-user"></i>
+                                    Profile
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a href="component_calendar.html" class="link">
+                    <i class="icon-calendar"></i>
+                                    Calendar
+                  </a>
+                </li>
+                <li role="presentation">
+                  <a href="#" class="link">
+                    <i class="icon-inbox"></i>
+                                    Inbox
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="visible-xs">
+              <a href="#"
+                 class="btn-navbar"
+                 data-toggle="collapse"
+                 data-target=".sidebar"
+                 title="">
+                <i class="icon-reorder"></i>
+              </a>
+            </li>
+            <li class="hidden-xs"><a href="login.html"><i class="icon-signout"></i></a></li>
+          </ul>
+          <form id="search-form" class="navbar-form pull-right" role="search">
+            <input type="search" class="search-query" placeholder="Search...">
+          </form>
+          <div class="notifications pull-right">
+            <div class="alert pull-right">
+              <a href="#" class="close" data-dismiss="alert">&times;</a>
+              <i class="icon-info-sign"></i> Check out Light Blue <a id="notification-link" href="#">settings</a> on the right!
+            </div>
+          </div>
         </div>
+      </header>
+      <div class="content container">
+        {% block main %}
+        {% endblock %}
       </div>
-      <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-44784280-1', 'instanc.es');
-      ga('send', 'pageview');
-      </script>
+    </div>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-44784280-1', 'instanc.es');
+    ga('send', 'pageview');
+    </script>
     {% block jsbottom %}
       <script src="{{ static_url('js/jquery.min.js') }}"></script>
       <script src="{{ static_url('js/uikit.min.js') }}"></script>

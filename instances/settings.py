@@ -32,13 +32,13 @@ if DEBUG:  # localhost
     DOMAIN = '{0}:{1}'.format(HOST, PORT)
     GITHUB_CLIENT_ID = 'bae76639a0b0be1ba87f'
     GITHUB_CLIENT_SECRET = 'b48f447af184fdcd67e817769c4e309781f7ac6d'
-
+    STATIC_BASE_URL = '/static/'
 else:
     HOST = env.get("HOST")
     DOMAIN = env.get("DOMAIN")
     GITHUB_CLIENT_ID = '5ea8d7815912f72daf71'
     GITHUB_CLIENT_SECRET = '8cad784045aa0a99c687abc0da696bf16a3db0a6'
-
+    STATIC_BASE_URL = 'https://s3.amazonaws.com/static.instanc.es/static/'
 
 SCHEMA = PORT == 443 and 'https://' or "http://"
 

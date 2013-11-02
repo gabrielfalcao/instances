@@ -6,12 +6,12 @@
     <meta name="robots" content="noindex">
     <meta name="google-site-verification" content="kSIvUEvvttuo56hQ7f3nDkNppB-BhuiojDz4cdZhXn4" />
     {% block csshead %}
-    <link href="{{ url_for('static', v=settings.RELEASE, filename='css/uikit.min.css') }}" rel="stylesheet" />
-    <link href="{{ url_for('static', v=settings.RELEASE, filename='css/simple-map-d3.css') }}" rel="stylesheet" />
-    <link href="{{ url_for('static', v=settings.RELEASE, filename='css/style.css') }}" rel="stylesheet" />
+    <link href="{{ static_url('css/uikit.min.css') }}" rel="stylesheet" />
+    <link href="{{ static_url('css/simple-map-d3.css') }}" rel="stylesheet" />
+    <link href="{{ static_url('css/style.css') }}" rel="stylesheet" />
     {% endblock %}
     {% block jshead %}
-    <script src="{{ url_for('static', v=settings.RELEASE, filename='js/prefixfree.min.js') }}"></script>
+    <script src="{{ static_url('js/prefixfree.min.js') }}"></script>
     {% endblock %}
   </head>
   <body {% block body_attributes %}{% endblock %}>
@@ -65,11 +65,11 @@
       ga('send', 'pageview');
       </script>
     {% block jsbottom %}
-      <script src="{{ url_for('static', v=settings.RELEASE, filename='js/jquery.min.js') }}"></script>
-      <script src="{{ url_for('static', v=settings.RELEASE, filename='js/uikit.min.js') }}"></script>
-      <script src="{{ url_for('static', v=settings.RELEASE, filename='js/angular.min.js') }}"></script>
-      <script src="{{ url_for('static', v=settings.RELEASE, filename='js/socket.io.min.js') }}"></script>
-      <script src="{{ url_for('static', v=settings.RELEASE, filename='js/jquery.tipsy.js') }}"></script>
+      <script src="{{ static_url('js/jquery.min.js') }}"></script>
+      <script src="{{ static_url('js/uikit.min.js') }}"></script>
+      <script src="{{ static_url('js/angular.min.js') }}"></script>
+      <script src="{{ static_url('js/socket.io.min.js') }}"></script>
+      <script src="{{ static_url('js/jquery.tipsy.js') }}"></script>
     {% endblock %}
   </body>
 </html>

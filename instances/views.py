@@ -123,6 +123,7 @@ def inject_basics():
         len=len,
         full_url_for=lambda *args, **kw: settings.absurl(url_for(*args, **kw)),
         ssl_full_url_for=lambda *args, **kw: settings.sslabsurl(url_for(*args, **kw)),
+        static_url=lambda path: "{0}/{1}".format(settings.STATIC_BASE_URL.rstrip('/'), path.lstrip('/')),
     )
 
 

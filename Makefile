@@ -73,10 +73,13 @@ production-dump.sql:
 	@echo "Saved at production-dump.sql"
 
 deploy:
-	@fab -i ~/.ssh/gabrielfalcao-instances.pem -u ubuntu -H ubuntu@ec2-54-200-130-225.us-west-2.compute.amazonaws.com deploy
+	@fab -i ~/.ssh/gabrielfalcao-instances.pem -u ubuntu -H web.instanc.es deploy
 
 create-machine:
-	@fab -i ~/.ssh/gabrielfalcao-instances.pem -u ubuntu -H ubuntu@ec2-54-200-130-225.us-west-2.compute.amazonaws.com  create
+	@fab -i ~/.ssh/gabrielfalcao-instances.pem -u ubuntu -H web.instanc.es  create
+
+ssh:
+	@ssh -i ~/.ssh/gabrielfalcao-instances.pem ubuntu@instanc.es
 
 full-deploy: create-machine deploy
 
@@ -88,4 +91,4 @@ redis-dump:
 	@scp root@instanc.es:/var/lib/redis/*  /usr/local/var/db/redis/
 
 redis-push:
-	@scp -i ~/.ssh/gabrielfalcao-instances.pem /usr/local/var/db/redis/* ubuntu@ec2-54-200-130-225.us-west-2.compute.amazonaws.com:
+	@scp -i ~/.ssh/gabrielfalcao-instances.pem /usr/local/var/db/redis/* ubuntu@instanc.es:

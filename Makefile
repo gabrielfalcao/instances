@@ -73,10 +73,10 @@ production-dump.sql:
 	@echo "Saved at production-dump.sql"
 
 deploy:
-	@fab -u root -H instanc.es deploy
+	@fab -i ~/.ssh/gabrielfalcao-instances.pem -u ubuntu -H ubuntu@ec2-54-200-130-225.us-west-2.compute.amazonaws.com deploy
 
 create-machine:
-	@fab -u root -H instanc.es create
+	@fab -i ~/.ssh/gabrielfalcao-instances.pem -u ubuntu -H ubuntu@ec2-54-200-130-225.us-west-2.compute.amazonaws.com  create
 
 full-deploy: create-machine deploy
 

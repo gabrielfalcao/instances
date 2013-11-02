@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import commands
 from datetime import datetime
 from os.path import dirname, abspath, join
-from fabric.api import run, runs_once, put
+from fabric.api import run, runs_once, put, sudo
 
 LOCAL_FILE = lambda *path: join(abspath(dirname(__file__)), *path)
 
@@ -12,7 +12,7 @@ SOURCECODE_PATH = LOCAL_FILE('*')
 
 @runs_once
 def create():
-    run("apt-get -q=2 update")
+    sudo("apt-get -q=2 update")
     dependencies = [
         'git-core',
         'python-pip',
@@ -20,17 +20,19 @@ def create():
         'python-dev',
         'libmysqlclient-dev',
         'mysql-client',
-        'redis-server',
         'libxml2-dev',
         'libxslt1-dev',
         'libevent-dev',
         'libev-dev',
         'virtualenvwrapper',
     ]
-    run("apt-get install -q=2 -y aptitude")
-    run("aptitude install -q=2 -y {0}".format(" ".join(dependencies)))
-    run("test -e /srv && rm -rf /srv/")
-    run("mkdir -p /srv/")
+    sudo("apt-get install -q=2 -y aptitude")
+    sudo("aptitude install -q=2 -y {0}".format(" ".join(dependencies)))
+    sudo("test -e /srv && rm -rf /srv/")
+    sudo("mkdir -p /srv/")
+    sudo("mkdir -p /var/log/instances")
+    sudo("chown -R ubuntu /srv")
+    sudo("chown -R ubuntu /var/log/instances")
 
 
 @runs_once

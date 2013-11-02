@@ -132,7 +132,7 @@ def index():
     if 'github_user_data' in session:
         return redirect(url_for('.dashboard'))
 
-    return render_template('index.html')
+    return render_template('light-base.html')
 
 
 

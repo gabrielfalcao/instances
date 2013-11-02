@@ -40,7 +40,7 @@ else:
     GITHUB_CLIENT_SECRET = '0cf0f19d17cda2fc9b590b6f238f4b41087cc950' #  '8cad784045aa0a99c687abc0da696bf16a3db0a6'
     STATIC_BASE_URL = 'https://s3.amazonaws.com/static.instanc.es/static/'
 
-SCHEMA = PORT == 443 and 'https://' or "http://"
+SCHEMA = 'https://' # PORT == 443 and 'https://' or "http://"
 
 absurl = lambda *path: "{0}{1}/{2}".format(SCHEMA, DOMAIN, "/".join(path).lstrip('/'))
 sslabsurl = lambda *path: "{0}{1}/{2}".format("https://", DOMAIN, "/".join(path).lstrip('/'))

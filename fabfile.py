@@ -30,9 +30,10 @@ def create():
     sudo("aptitude install -q=2 -y {0}".format(" ".join(dependencies)))
     sudo("test -e /srv && rm -rf /srv/")
     sudo("mkdir -p /srv/")
-    sudo("mkdir -p /var/log/instances")
+    sudo("mkdir -p /var/log/instances/supervisor")
     sudo("chown -R ubuntu /srv")
     sudo("chown -R ubuntu /var/log/instances")
+    sudo("chown -R ubuntu /etc/supervisor")
 
 
 @runs_once
@@ -50,9 +51,10 @@ def deploy():
     put(LOCAL_FILE('.conf', 'sitecustomize.py.template'), "/srv/venv/lib/python2.7/sitecustomize.py")
 
     run("/srv/venv/bin/pip uninstall -y -q curdling || echo")
-    run("/srv/venv/bin/pip install -U -q curdling")
-    run("/srv/venv/bin/curd -l DEBUG --log-name=curdling --log-file=/var/log/curdling.log install -r /srv/instances/requirements.txt")
+    run("/srv/venv/bin/pip install -q curdling")
+    run("/srv/venv/bin/curd -l DEBUG --log-name=curdling --log-file=/var/log/instances/curdling.log install -r /srv/instances/requirements.txt")
     run("mkdir -p /srv/certificates")
+    sudo("chmod -R 755 /srv/certificates")
 
     put(LOCAL_FILE('.conf', 'ssl.key.dec'), "/srv/certificates/ssl.key")
     put(LOCAL_FILE('.conf', 'ssl.crt'), "/srv/certificates/ssl.crt")
@@ -62,7 +64,7 @@ def deploy():
     put(LOCAL_FILE('.conf', 'supervisor.http.conf'), "/etc/supervisor/conf.d/instances-http.conf")
     put(LOCAL_FILE('.conf', 'supervisor.ssl.conf'), "/etc/supervisor/conf.d/instances-ssl.conf")
 
-    run("service supervisor stop")
-    run("(ps aux | egrep supervisord | grep -v grep | awk '{ print $2 }' | xargs kill -9 2>&1>/dev/null) 2>&1>/dev/null || printf '\033[1;32mSupervisor is down\033[0m'")
-    run("(ps aux | egrep gunicorn | grep -v grep | awk '{ print $2 }' | xargs kill -9 2>&1>/dev/null) 2>&1>/dev/null || printf '\033[1;32mGunicorn is down\033[0m'")
-    run("service supervisor start")
+    sudo("service supervisor stop")
+    sudo("(ps aux | egrep supervisord | grep -v grep | awk '{ print $2 }' | xargs kill -9 2>&1>/dev/null) 2>&1>/dev/null || printf '\033[1;32mSupervisor is down\033[0m'")
+    sudo("(ps aux | egrep gunicorn | grep -v grep | awk '{ print $2 }' | xargs kill -9 2>&1>/dev/null) 2>&1>/dev/null || printf '\033[1;32mGunicorn is down\033[0m'")
+    sudo("service supervisor start")

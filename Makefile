@@ -86,3 +86,6 @@ sync:
 
 redis-dump:
 	@scp root@instanc.es:/var/lib/redis/*  /usr/local/var/db/redis/
+
+redis-push:
+	@scp -i ~/.ssh/gabrielfalcao-instances.pem /usr/local/var/db/redis/* ubuntu@ec2-54-200-130-225.us-west-2.compute.amazonaws.com:

@@ -34,9 +34,9 @@ def create():
     sudo("test -e /srv && rm -rf /srv/")
     sudo("mkdir -p /srv/")
     sudo("mkdir -p /var/log/instances/supervisor")
-    sudo("chown -R ubuntu /srv")
-    sudo("chown -R ubuntu /var/log/instances")
-    sudo("chown -R ubuntu /etc/supervisor")
+    sudo("chown -R ubuntu.ubuntu /srv")
+    sudo("chown -R ubuntu.ubuntu /var/log/instances")
+    sudo("chown -R ubuntu.ubuntu /etc/supervisor")
 
 
 @runs_once

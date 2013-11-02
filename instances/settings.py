@@ -30,8 +30,8 @@ SQLALCHEMY_DATABASE_URI = DATABASE
 if DEBUG:  # localhost
     HOST = 'localhost'
     DOMAIN = '{0}:{1}'.format(HOST, PORT)
-    GITHUB_CLIENT_ID = 'bae76639a0b0be1ba87f'
-    GITHUB_CLIENT_SECRET = 'b48f447af184fdcd67e817769c4e309781f7ac6d'
+    GITHUB_CLIENT_ID = 'ccac4218d02b9ab33138' #  'bae76639a0b0be1ba87f'
+    GITHUB_CLIENT_SECRET = '0cf0f19d17cda2fc9b590b6f238f4b41087cc950' #  'b48f447af184fdcd67e817769c4e309781f7ac6d'
     STATIC_BASE_URL = '/static/'
 else:
     HOST = env.get("HOST")

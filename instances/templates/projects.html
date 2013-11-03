@@ -1,0 +1,39 @@
+<div class="content container" ng-show="user_info">
+  <div class="row">
+    <div class="col-md-12">
+      <section class="widget">
+        <header>
+          <h4>
+            <i class="icon-list-alt"></i>
+            Projects
+          </h4>
+          <select>
+            <option class="btn btn-danger btn-large" value="">Personal</option>
+            <option value="">Yipit</option>
+          </select>
+        </header>
+        <div class="body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% raw %}
+              <tr ng-repeat="project in user_info.repositories">
+                <td>{{ project.full_name }}e</td>
+                <td>
+                  <button ng-click="ShowTrackingCode(project)" class="btn btn-primary">
+                    <i class="fa fa-code"></i>Tracking Codes</button>
+                </td>
+              </tr>
+              {% endraw %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

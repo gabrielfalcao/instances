@@ -92,7 +92,7 @@ def index():
     if 'github_user_data' in session:
         return redirect(url_for('.dashboard'))
 
-    return render_template('light-base.html')
+    return render_template('landing.html')
 
 
 
@@ -110,7 +110,7 @@ def show_settings():
 @mod.route("/dashboard")
 @requires_login
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('light-base.html')
 
 
 @mod.route("/email")
@@ -135,9 +135,9 @@ def ajax_tracking_modal_html(project):
     return render_template('dashboard/tracking-modal.html', repository=repository, username=username)
 
 
-@mod.route("/bin/dashboard/repo-list.json")
+@mod.route("/bin/user.json")
 @requires_login
-def ajax_dashboard_repo_list():
+def ajax_user_info():
     username = session['github_user_data']['login']
     key = KeyRing.for_user_project_name_set(username)
 
@@ -149,6 +149,7 @@ def ajax_dashboard_repo_list():
     tracked_repositories = [repositories_by_name[name] for name in tracked_names]
 
     return json_response({
+        'user': session['github_user_data'],
         'tracked_repositories': tracked_repositories,
         'repositories': repositories,
         'repositories_by_name': repositories_by_name,

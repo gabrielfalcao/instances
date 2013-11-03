@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analytics for Open Source Developers</title>
+    <link href="{{ static_url('css/application.min.css') }}" rel="stylesheet">
+    <link href="{{ static_url('css/style2.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" type="text/css" />
+    <link rel="shortcut icon" href="{{ static_url('img/favicon.png') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Gabriel Falcão">
+    <meta charset="utf-8">
+</head>
+<body class="background landing">
+<div class="container">
+    <header class="page-header">
+        <div class="navbar">
+            <div class="logo pull-left">
+                <h4><a href="{{ url_for('.index') }}">Instanc.<strong>es</strong></a> <small>Analytics for Open Source Developers</small></h4>
+            </div>
+            <ul class="nav navbar-nav pull-right navbar-menu hidden-xs">
+                <li class="active">
+                    <a href="{{ url_for('.login') }}">
+                        Sign In with GitHub
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <div class="content">
+        <div id="carousel-landing" class="carousel slide carousel-landing carousel-fade">
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-landing" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-landing" data-slide-to="1" class=""></li>
+                <li data-target="#carousel-landing" data-slide-to="2" class=""></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="animated fadeInLeftBig">
+                                <h1 class="slide-one-header"><strong>Free, Real-time</strong><br>Analytics</h1>
+                                <p class="lead hidden-xs">
+                                  <strong>For open source developers</strong>
+                                </p>
+                                <p>
+                                    <a href="{{ url_for('.login') }}" class="btn btn-lg btn-white">
+                                        Sign in with GitHub &nbsp; <i class="icon-angle-right"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="text-align-center animated fadeInRightBig">
+                                <img src="{{ static_url('img/jpeg/light-blue-preview-1.png') }}" alt="Second slide">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <h1 class="slide-two-header text-align-center animated fadeInDown">
+                        <strong>We fathom</strong> your  <strong>public activity</strong>
+                    </h1>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="animated fadeInLeftBig">
+                                <p>
+                                    <a href="{{ url_for('.login') }}">
+                                        <img src="{{ static_url('img/jpeg/light-blue-laptop-transparent.png') }}" alt=""/>
+                                    </a>
+                                </p>
+                                <p class="col-xs-3">
+                                </p>
+                                <p class="lead text-align-left col-xs-9">
+                                  Graphs with stars, forks, visitors, issues and pull-requests <strong>over-time</strong>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="animated fadeInRightBig">
+                              <h2><strong>Never miss a busy pull-request</strong></h2>
+                              <p class="lead">
+                                See your repositories by order of the ones with more people interested in.
+                              </p>
+                              <h2><strong>Gain visibility</strong></h2>
+                              <p class="lead">
+                                Instanc.es gives you a public profile
+                              summarizing all your sweat, and even
+                              shows meaningful information of why
+                              people should donate to you.</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="animated fadeInLeft">
+                                <h1 class="slide-three-header">
+                                    <strong>Mobile-friendly</strong>
+                                    <br>
+                                </h1>
+                                <ul class="lead">
+                                  <li>Live stats of visitors</li>
+                                  <li>Follow closely your visitors from hacker news</li>
+                                  <li>Even in a smartphone</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <p class="animated fadeInUp" style="margin-top: 20px">
+                                <img src="{{ static_url('img/jpeg/light-blue-phone.png') }}" alt=""/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="left carousel-control" href="#carousel-landing" data-slide="prev">
+                <span class="icon-prev"></span>
+            </a>
+            <a class="right carousel-control" href="#carousel-landing" data-slide="next">
+                <span class="icon-next"></span>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="about" class="widget widget-white widget-about">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-10">
+              <h2>Features</h2>
+                <div class="row features">
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+                                        <span class="icon background-warning">
+                                            <i class="glyphicon glyphicon-star"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>Embeddable Widgets</h4>
+                                    <p>
+                                      Free hosted fork/star widgets for your github projects.
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+                                        <span class="icon background-lime">
+                                            <i class="fa fa-github"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>Full github integration</h4>
+                                    <p>
+                                      See how many hours of your free
+                                    time you spent building the code
+                                    you are passionate about.</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+                                        <span class="icon background-danger">
+                                            <i class="fa fa-cloud"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>RESTful API</h4>
+                                    <p>
+                                      Your data is yours, and you can
+                                    easily use it for whatever you
+                                    want.</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="row features">
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+                                        <span class="icon background-success">
+                                            <i class="fa fa-globe"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>Geographical Information</h4>
+                                    <p>Know in what countries your project is most relevant.</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+                                        <span class="icon background-info">
+                                            <i class="fa fa-twitter"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>Social Repercussion</h4>
+                                    <p>
+                                      Automatic crunch of how your project is doing in social media: tweets, mentions and followers.
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+                                        <span class="icon background-primary">
+                                            <i class="fa fa-lightbulb-o"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>Smart Analysis</h4>
+                                    <p>
+                                      See how important and relevant
+                                    is the project you've been
+                                    spending time with.</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="preview text-align-center">
+            <a href="{{ url_for('.login') }}" class="btn btn-lg btn-danger">
+              <i style="color:white" class="fa fa-github-alt"></i>
+              Sign-in now
+            </a>
+        </p>
+    </div>
+</div>
+<footer>
+<h4 class="text-align-center">Made with &hearts; in Brooklyn</h4>
+<p class="text-align-center">&copy; Copyright 2013 Instanc.es
+  <a href="http://falcao.it">Gabriel Falc&atilde;o</a>
+</p>
+</footer>
+<!-- jquery and friends -->
+<script src="{{ static_url('lib/jquery/jquery.1.9.0.min.js') }}"> </script>
+
+<!-- bootstrap default plugins -->
+<script src="{{ static_url('lib/bootstrap/transition.js') }}"></script>
+<script src="{{ static_url('lib/bootstrap/carousel.js') }}"></script>
+
+<!-- page specific -->
+<script src="{{ static_url('js/landing.js') }}"></script>
+</body>

@@ -1,0 +1,30 @@
+<nav ng-show="user_info" id="sidebar" class="sidebar nav-collapse collapse" ng-controller="InstancesSideBar">
+  <ul id="side-nav" class="side-nav">
+    <li >
+      <a href="{{ url_for('.dashboard') }}"><i class="fa fa-cog"></i> <span class="name">Projects</span></a>
+    </li>
+    <li class="panel">
+      <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#side-nav" href="#stats-collapse"><i class="icon-bar-chart"></i> <span class="name">Statistics</span></a>
+      <ul id="stats-collapse" class="panel-collapse collapse">
+        <li><a ng-click="ShowForks(current_project)" href="">Forks</a></li>
+        <li><a ng-click="ShowStars(current_project)" href="">Stars</a></li>
+        <li><a ng-click="ShowDownloaders(current_project)" href="">Downloaders</a></li>
+        <li><a ng-click="ShowIssues(current_project)" href="">Issues</a></li>
+        <li><a ng-click="ShowPullRequests(current_project)" href="">Pull Requests</a></li>
+
+        <li><a ng-click="ShowBadgeImpressions(current_project)" href="">Badge Impressions</a></li>
+      </ul>
+    </li>
+    <li class="panel">
+      <a class="accordion-toggle collapsed" data-toggle="collapse"
+         data-parent="#side-nav" href="#ui-collapse"><i class="fa fa-twitter"></i> <span class="name">Social</span></a>
+      <ul id="ui-collapse" class="panel-collapse collapse">
+        <li><a ng-click="ShowTwitterMentions(current_project)" href="">TwitterMentions</a></li>
+        <li><a ng-click="ShowStackoverflowTopics(current_project)" href="">StackoverflowTopics</a></li>
+      </ul>
+    </li>
+    <li class="visible-xs">
+      <a href="{{ url_for('.logout') }}"><i class="icon-signout"></i> <span class="name">Sign Out</span></a>
+    </li>
+  </ul>
+</nav>

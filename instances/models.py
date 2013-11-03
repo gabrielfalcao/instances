@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
-import ejson as json
-import ejson.serializers
+import json
 import hashlib
 from datetime import datetime
 # from werkzeug import generate_password_hash, check_password_hash

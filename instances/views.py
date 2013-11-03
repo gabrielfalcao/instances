@@ -26,7 +26,6 @@ from instances.log import logger
 from instances.core import KeyRing
 from instances import db
 from redis import Redis
-from flaskext.github import GithubAuth
 
 mod = Blueprint('views', __name__)
 
@@ -48,15 +47,6 @@ def error_json_response(message, status=200):
     }, status=status)
 
 
-github = GithubAuth(
-    client_id=settings.GITHUB_CLIENT_ID,
-    client_secret=settings.GITHUB_CLIENT_SECRET,
-    session_key='user_id',
-    # request_token_params={
-    #     'scope': 'user,user:email,user:follow,repo,repo:status'
-    # }
-)
-
 
 @mod.before_request
 def prepare():
@@ -75,42 +65,12 @@ def add_message(message, error=None):
     })
 
 
-@github.access_token_getter
-def get_github_token(token=None):
-    return session.get('github_token', token)  # might bug
 
 def get_events_for_user(token, github_user_data):
     api = GithubEndpoint(user.github_token, public=True)
     response = api.retrieve("/events")
     redis = Redis()
     redis.lpush("events-{login}".format(**github_user_data), response)
-
-
-@mod.route('/.sys/callback')
-@github.authorized_handler
-def github_callback(resp):
-    from instances.models import User
-    next_url = request.args.get('next') or '/'
-    if resp is None:
-        logger.error(u'You denied the request to sign in.')
-        return redirect(next_url)
-
-    error = resp.get('error')
-
-    if error:
-        logger.error(u'Github error: %s', error)
-        return redirect(next_url)
-
-    token = resp['access_token']
-    session['github_token'] = token
-
-    github_user_data = GithubUser.fetch_info(token, skip_cache=True)
-
-    github_user_data['github_token'] = token
-
-    g.user = User.get_or_create_from_github_user(github_user_data)
-    session['github_user_data'] = github_user_data
-    return redirect(next_url)
 
 
 @mod.context_processor
@@ -386,4 +346,26 @@ def page_not_found(e):
 @mod.route('/login')
 def login():
     cb = settings.absurl('.sys/callback')
-    return github.authorize(callback_url=cb)
+    return mod.github.authorize('user,user:email,user:follow')
+
+
+def get_github_token(token=None):
+    return session.get('github_token', token)  # might bug
+
+
+def github_callback(token):
+    from instances.models import User
+    next_url = request.args.get('next') or '/'
+    if not token:
+        logger.error(u'You denied the request to sign in.')
+        return redirect(next_url)
+
+    session['github_token'] = token
+
+    github_user_data = GithubUser.fetch_info(token, skip_cache=True)
+
+    github_user_data['github_token'] = token
+
+    g.user = User.get_or_create_from_github_user(github_user_data)
+    session['github_user_data'] = github_user_data
+    return redirect(next_url)

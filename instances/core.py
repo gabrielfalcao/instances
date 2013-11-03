@@ -4,7 +4,6 @@
 import re
 from flask import url_for
 from instances import settings
-from flaskext.github import GithubAuth
 
 
 def full_url_for(*args, **kw):

@@ -3,6 +3,8 @@
 <head>
     <title>Analytics for Open Source Developers</title>
     <link href="{{ static_url('css/application.min.css') }}" rel="stylesheet">
+    <link href="{{ static_url('css/style2.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" type="text/css" />
     <link rel="shortcut icon" href="{{ static_url('img/favicon.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -14,7 +16,7 @@
     <header class="page-header">
         <div class="navbar">
             <div class="logo pull-left">
-                <h4><a href="index.html">Instanc.<strong>es</strong></a> <small>Analytics for Open Source Developers</small></h4>
+                <h4><a href="{{ url_for('.index') }}">Instanc.<strong>es</strong></a> <small>Analytics for Open Source Developers</small></h4>
             </div>
             <ul class="nav navbar-nav pull-right navbar-menu hidden-xs">
                 <li class="active">
@@ -37,12 +39,12 @@
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="animated fadeInLeftBig">
-                                <h1 class="slide-one-header"><strong>Real-time</strong><br>Analytics</h1>
+                                <h1 class="slide-one-header"><strong>Free, Real-time</strong><br>Analytics</h1>
                                 <p class="lead hidden-xs">
-                                  <strong>Tracking your project's github page</strong>
+                                  <strong>For open source developers</strong>
                                 </p>
                                 <p>
-                                    <a href="index.html" class="btn btn-lg btn-white">
+                                    <a href="{{ url_for('.login') }}" class="btn btn-lg btn-white">
                                         Sign in with GitHub &nbsp; <i class="icon-angle-right"></i>
                                     </a>
                                 </p>
@@ -57,36 +59,36 @@
                 </div>
                 <div class="item">
                     <h1 class="slide-two-header text-align-center animated fadeInDown">
-                        <strong>Transparent</strong> & <strong>White</strong>
-                        Versions
+                        <strong>We fathom</strong> your  <strong>public activity</strong>
                     </h1>
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="animated fadeInLeftBig">
                                 <p>
-                                    <a href="index.html">
-                                        <img src="img/jpeg/light-blue-laptop-transparent.png" alt=""/>
+                                    <a href="{{ url_for('.login') }}">
+                                        <img src="{{ static_url('img/jpeg/light-blue-laptop-transparent.png') }}" alt=""/>
                                     </a>
                                 </p>
-                                <p class="text-align-center">
-                                    <a href="index.html" class="btn btn-transparent btn-lg btn-version-preview">
-                                        Preview &nbsp; <i class="icon-angle-right"></i>
-                                    </a>
+                                <p class="col-xs-3">
+                                </p>
+                                <p class="lead text-align-left col-xs-9">
+                                  Graphs with stars, forks, visitors, issues and pull-requests <strong>over-time</strong>
                                 </p>
                             </div>
                         </div>
                         <div class="col-xs-6">
                             <div class="animated fadeInRightBig">
-                                <p>
-                                    <a href="white/index.html">
-                                        <img src="img/jpeg/light-blue-laptop-white.png" alt=""/>
-                                    </a>
-                                </p>
-                                <p class="text-align-center">
-                                    <a href="white/index.html" class="btn btn-white btn-lg btn-version-preview">
-                                        Preview &nbsp; <i class="icon-angle-right"></i>
-                                    </a>
-                                </p>
+                              <h2><strong>Never miss a busy pull-request</strong></h2>
+                              <p class="lead">
+                                See your repositories by order of the ones with more people interested in.
+                              </p>
+                              <h2><strong>Gain visibility</strong></h2>
+                              <p class="lead">
+                                Instanc.es gives you a public profile
+                              summarizing all your sweat, and even
+                              shows meaningful information of why
+                              people should donate to you.</p>
+
                             </div>
                         </div>
                     </div>
@@ -96,20 +98,19 @@
                         <div class="col-xs-6">
                             <div class="animated fadeInLeft">
                                 <h1 class="slide-three-header">
-                                    <strong>Fully</strong>
+                                    <strong>Mobile-friendly</strong>
                                     <br>
-                                    Responsive
                                 </h1>
-                                <p>
-                                    <a href="http://responsinator.com/?url=http%3A%2F%2Fdemo.okendoken.com" class="btn btn-white btn-lg" target="_blank">
-                                        Test It
-                                    </a>
-                                </p>
+                                <ul class="lead">
+                                  <li>Live stats of visitors</li>
+                                  <li>Follow closely your visitors from hacker news</li>
+                                  <li>Even in a smartphone</li>
+                                </ul>
                             </div>
                         </div>
                         <div class="col-xs-6">
                             <p class="animated fadeInUp" style="margin-top: 20px">
-                                <img src="img/jpeg/light-blue-phone.png" alt=""/>
+                                <img src="{{ static_url('img/jpeg/light-blue-phone.png') }}" alt=""/>
                             </p>
                         </div>
                     </div>
@@ -128,87 +129,22 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-offset-1 col-sm-10">
-                <h2><strong>About Light Blue</strong></h2>
-                <p>
-                    <strong>Light Blue</strong> - is a next generation dashboard template. Flat design and transparency - the
-                    design that the world haven't seen before Light Blue.
-                </p>
+              <h2>Features</h2>
                 <div class="row features">
-                    <div class="col-sm-4">
-                        <section class="feature">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <p>
-                                        <span class="icon background-danger">
-                                            <i class="icon-bold"></i>
-                                        </span>
-                                    </p>
-                                </div>
-                                <div class="col-xs-8">
-                                    <h4>Bootstrap 3</h4>
-                                    <p>
-                                        Light Blue comes with built-in Twitter Bootstrap 3 support.
-                                        Easy to design your next web app.
-                                    </p>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
                     <div class="col-sm-4">
                         <section class="feature">
                             <div class="row">
                                 <div class="col-xs-4">
                                     <p>
                                         <span class="icon background-warning">
-                                            <i class="icon-magic"></i>
+                                            <i class="glyphicon glyphicon-star"></i>
                                         </span>
                                     </p>
                                 </div>
                                 <div class="col-xs-8">
-                                    <h4>Unique design</h4>
+                                    <h4>Embeddable Widgets</h4>
                                     <p>
-                                        Transparent widgets and gradient background - have you seen something like this
-                                        before?
-                                    </p>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-sm-4">
-                        <section class="feature">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <p>
-                                        <span class="icon background-success">
-                                            <i class="icon-wrench"></i>
-                                        </span>
-                                    </p>
-                                </div>
-                                <div class="col-xs-8">
-                                    <h4>Developer-friendly</h4>
-                                    <p>
-                                        Simple, intuitive and easily maintainable code.
-                                    </p>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div class="row features">
-                    <div class="col-sm-4">
-                        <section class="feature">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <p>
-                                        <span class="icon background-primary">
-                                            <i class="icon-superscript"></i>
-                                        </span>
-                                    </p>
-                                </div>
-                                <div class="col-xs-8">
-                                    <h4>White & Transparent</h4>
-                                    <p>
-                                        Two styles each having two background options.
+                                      Free hosted fork/star widgets for your github projects.
                                     </p>
                                 </div>
                             </div>
@@ -220,16 +156,55 @@
                                 <div class="col-xs-4">
                                     <p>
                                         <span class="icon background-lime">
-                                            <i class="icon-ok"></i>
+                                            <i class="fa fa-github"></i>
                                         </span>
                                     </p>
                                 </div>
                                 <div class="col-xs-8">
-                                    <h4>Web applications</h4>
+                                    <h4>Full github integration</h4>
                                     <p>
-                                        LB itself is a web app. Plus there is an Email -
-                                        ready-to-use Backbone application.
+                                      See how many hours of your free
+                                    time you spent building the code
+                                    you are passionate about.</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+                                        <span class="icon background-danger">
+                                            <i class="fa fa-cloud"></i>
+                                        </span>
                                     </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>RESTful API</h4>
+                                    <p>
+                                      Your data is yours, and you can
+                                    easily use it for whatever you
+                                    want.</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="row features">
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+                                        <span class="icon background-success">
+                                            <i class="fa fa-globe"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>Geographical Information</h4>
+                                    <p>Know in what countries your project is most relevant.</p>
                                 </div>
                             </div>
                         </section>
@@ -240,16 +215,35 @@
                                 <div class="col-xs-4">
                                     <p>
                                         <span class="icon background-info">
-                                            <i class="icon-css3"></i>
+                                            <i class="fa fa-twitter"></i>
                                         </span>
                                     </p>
                                 </div>
                                 <div class="col-xs-8">
-                                    <h4>Sass-powered</h4>
+                                    <h4>Social Repercussion</h4>
                                     <p>
-                                        Variables, mixins, include - these things
-                                        make Light Blue really easy to customize.
+                                      Automatic crunch of how your project is doing in social media: tweets, mentions and followers.
                                     </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-sm-4">
+                        <section class="feature">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <p>
+                                        <span class="icon background-primary">
+                                            <i class="fa fa-lightbulb-o"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>Smart Analysis</h4>
+                                    <p>
+                                      See how important and relevant
+                                    is the project you've been
+                                    spending time with.</p>
                                 </div>
                             </div>
                         </section>
@@ -258,15 +252,19 @@
             </div>
         </div>
         <p class="preview text-align-center">
-            <a href="white/index.html" class="btn btn-lg btn-danger">
-                &nbsp; Preview the White Version &nbsp;
+            <a href="{{ url_for('.login') }}" class="btn btn-lg btn-danger">
+              <i style="color:white" class="fa fa-github-alt"></i>
+              Sign-in now
             </a>
         </p>
     </div>
 </div>
-<h2 class="thanks text-align-center">Thanks for watching!</h2>
-<p class="lead text-align-center"><a class="back-to-top" href="#"> back to top <i class="icon-angle-up"></i></a></p>
-
+<footer>
+<h4 class="text-align-center">Made with &hearts; in Brooklyn</h4>
+<p class="text-align-center">&copy; Copyright 2013 Instanc.es
+  <a href="http://falcao.it">Gabriel Falc&atilde;o</a>
+</p>
+</footer>
 <!-- jquery and friends -->
 <script src="{{ static_url('lib/jquery/jquery.1.9.0.min.js') }}"> </script>
 

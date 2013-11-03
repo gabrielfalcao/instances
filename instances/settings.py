@@ -40,8 +40,9 @@ else:
     GITHUB_CLIENT_SECRET = '8cad784045aa0a99c687abc0da696bf16a3db0a6'
     STATIC_BASE_URL = 'http://static.instanc.es/static/'
 
-SCHEMA = 'https://' # PORT == 443 and 'https://' or "http://"
-
+SCHEMA = PORT == 443 and 'https://' or "http://"
+GITHUB_CALLBACK_URL = '{SCHEMA}{DOMAIN}/.sys/callback'.format(**locals())
+print GITHUB_CALLBACK_URL
 absurl = lambda *path: "{0}{1}/{2}".format(SCHEMA, DOMAIN, "/".join(path).lstrip('/'))
 sslabsurl = lambda *path: "{0}{1}/{2}".format("https://", DOMAIN, "/".join(path).lstrip('/'))
 

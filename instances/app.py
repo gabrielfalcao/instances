@@ -14,6 +14,7 @@ from flask.sessions import SessionInterface, SessionMixin
 from flask import Flask, render_template
 from flask.ext.script import Manager
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.github import GitHub
 
 from logging import getLogger, StreamHandler
 from sqlalchemy import (
@@ -120,8 +121,15 @@ class App(object):
         views.mod.engine = self.db.engine
         self.web.register_blueprint(views.mod)
 
+        # GitHub
+        self.github = GitHub(self.web)
+        views.mod.github = self.github
+
         if not self.testing_mode:
             self.setup_logging(output=sys.stderr, level=logging.ERROR)
+
+        self.github.access_token_getter(views.get_github_token)
+        self.web.route('/.sys/callback')(self.github.authorized_handler(views.github_callback))
 
         @self.web.errorhandler(500)
         def internal_error(exception):

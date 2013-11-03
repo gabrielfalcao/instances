@@ -83,7 +83,7 @@ create-machine:
 	@fab -i ~/.ssh/gabrielfalcao-instances.pem -u ubuntu -H web.instanc.es  create
 
 ssh:
-	@ssh -i ~/.ssh/gabrielfalcao-instances.pem ubuntu@instanc.es
+	@ssh -i ~/.ssh/gabrielfalcao-instances.pem ubuntu@web.instanc.es
 
 full-deploy: create-machine deploy
 

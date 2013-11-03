@@ -47,6 +47,7 @@ footer p a:hover {
 
 @keyframes do-spin {
   0% {
+
     transform: rotate(0deg);
   }
   100% {
@@ -67,4 +68,20 @@ footer p a:hover {
   width: 50%;
   height: 50%;
   margin: auto auto;
+}
+
+body {
+  font-size: 16px;
+}
+
+.sidebar {
+  font-size: 16px;
+}
+
+.logo a{
+font-size: 36px;
+text-align: left;
+margin: 0;
+padding: 0;
+margin-left: -40px;
 }

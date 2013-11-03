@@ -72,7 +72,11 @@ production-dump.sql:
 	@echo "OK"
 	@echo "Saved at production-dump.sql"
 
-deploy:
+sync-static:
+	@echo "Syncing static files"
+	@s3sync sync -a public_read instances/static/ static.instanc.es:static
+
+deploy: sync-static
 	@fab -i ~/.ssh/gabrielfalcao-instances.pem -u ubuntu -H web.instanc.es deploy
 
 create-machine:

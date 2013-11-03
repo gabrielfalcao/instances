@@ -74,7 +74,7 @@ production-dump.sql:
 
 sync-static:
 	@echo "Syncing static files"
-	@s3sync sync --verbose -a public_read instances/static/ static.instanc.es:static
+	@aws s3 sync --acl public-read ./instances/static/ s3://static.instanc.es/static/
 
 deploy:
 	@fab -i ~/.ssh/gabrielfalcao-instances.pem -u ubuntu -H web.instanc.es deploy
@@ -96,3 +96,7 @@ redis-dump:
 
 redis-push:
 	@scp -i ~/.ssh/gabrielfalcao-instances.pem /usr/local/var/db/redis/* ubuntu@instanc.es:
+
+
+tail:
+	@ssh -t -i ~/.ssh/gabrielfalcao-instances.pem ubuntu@web.instanc.es screen -c /srv/instances/.conf/screenrc

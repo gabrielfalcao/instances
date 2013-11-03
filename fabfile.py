@@ -18,7 +18,6 @@ def create():
         'python-pip',
         'supervisor',
         'redis-server',
-        'rubygems',
         'python-dev',
         'libmysqlclient-dev',
         'mysql-client',
@@ -30,7 +29,6 @@ def create():
     ]
     sudo("apt-get install -q=2 -y aptitude")
     sudo("aptitude install -q=2 -y {0}".format(" ".join(dependencies)))
-    sudo("gem install --no-ri --no-rdoc s3sync")
     sudo("test -e /srv && rm -rf /srv/")
     sudo("mkdir -p /srv/")
     sudo("mkdir -p /var/log/instances/supervisor")

@@ -74,9 +74,9 @@ production-dump.sql:
 
 sync-static:
 	@echo "Syncing static files"
-	@s3sync sync -a public_read instances/static/ static.instanc.es:static
+	@s3sync sync --verbose -a public_read instances/static/ static.instanc.es:static
 
-deploy: sync-static
+deploy:
 	@fab -i ~/.ssh/gabrielfalcao-instances.pem -u ubuntu -H web.instanc.es deploy
 
 create-machine:

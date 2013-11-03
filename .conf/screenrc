@@ -1,0 +1,10 @@
+split
+split
+split
+screen tail -f /var/log/instances/supervisor/http-stderr.log
+focus down
+screen tail -f /var/log/instances/supervisor/http-stdout.log
+focus down
+screen tail -f /var/log/instances/supervisor/ssl-stderr.log
+focus down
+screen tail -f /var/log/instances/supervisor/ssl-stdout.log

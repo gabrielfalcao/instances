@@ -8,3 +8,4 @@ steadymark==0.4.5
 sure==1.2.2
 tox==1.4.3
 fabric
+awscli

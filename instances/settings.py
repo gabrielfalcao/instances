@@ -38,7 +38,7 @@ else:
     DOMAIN = env.get("DOMAIN")
     GITHUB_CLIENT_ID = '5ea8d7815912f72daf71'
     GITHUB_CLIENT_SECRET = '8cad784045aa0a99c687abc0da696bf16a3db0a6'
-    STATIC_BASE_URL = 'https://static.instanc.es.s3-website-us-east-1.amazonaws.com/static/'
+    STATIC_BASE_URL = '//static.instanc.es.s3-website-us-east-1.amazonaws.com/static/'
 
 SCHEMA = PORT == 443 and 'https://' or "http://"
 GITHUB_CALLBACK_URL = '{SCHEMA}{DOMAIN}/.sys/callback'.format(**locals())

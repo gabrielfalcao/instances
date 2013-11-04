@@ -19,6 +19,8 @@
     <meta name="author" content="Gabriel Falcão" />
   </head>
   <body ng-controller="InstancesController"
+        data-repo-list-url="{{ full_url_for('.ajax_repo_list', owner="<owner>") }}"
+        data-tracking-code-modal-url="{{ full_url_for('.tracking_code_modal', owner="<owner>", name="<name>") }}"
         data-user-info-url="{{ full_url_for('.ajax_user_info') }}">
     <div class="logo">
       <h4><a href="{{ url_for('.index') }}">Instanc.<strong>es</strong></a></h4>

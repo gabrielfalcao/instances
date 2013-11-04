@@ -122,7 +122,15 @@ class GithubUser(Resource):
         response = instance.endpoint.retrieve('/user', skip_cache=skip_cache)
         if not response:
             return {}
-        return json.loads(response['response_data'])
+
+        user_info = json.loads(response['response_data'])
+        response2 = instance.endpoint.retrieve('/user/orgs', skip_cache=skip_cache)
+        if response2:
+            orgs = json.loads(response2['response_data'])
+            user_info['organizations'] = [o for o in orgs if 'coderwall' not in o['login']]
+        else:
+            logger.error("Failed to retrieve organizations for %s", str(user_info))
+        return user_info
 
     def get_starred(self, username):
         path = '/users/{0}/starred'.format(username)
@@ -149,6 +157,14 @@ class GithubUser(Resource):
     def get_repositories(self, username):
         path = '/users/{0}/repos?sort=pushed'.format(username)
         return self.get_path_recursively(path)
+
+    def get_organization(self, name):
+        path = '/orgs/{0}'.format(name)
+        print path, self.endpoint
+        response = self.endpoint.retrieve(path)
+        print response
+        value = json.loads(response['response_data'])
+        return value
 
 
 class GithubRepository(Resource):

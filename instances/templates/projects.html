@@ -1,16 +1,14 @@
-<div class="content container" ng-show="user_info">
+{% raw %}
+<div class="content container" ng-show="current_organization">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-1"></div>
+    <div class="col-md-8">
       <section class="widget">
         <header>
           <h4>
             <i class="icon-list-alt"></i>
             Projects
           </h4>
-          <select>
-            <option class="btn btn-danger btn-large" value="">Personal</option>
-            <option value="">Yipit</option>
-          </select>
         </header>
         <div class="body">
           <table class="table table-striped">
@@ -21,19 +19,34 @@
               </tr>
             </thead>
             <tbody>
-              {% raw %}
-              <tr ng-repeat="project in user_info.repositories">
-                <td>{{ project.full_name }}e</td>
+              <tr ng-repeat="project in ORGANIZATIONS[current_organization.login].repositories">
+                <td>{{ project.full_name }}</td>
                 <td>
-                  <button ng-click="ShowTrackingCode(project)" class="btn btn-primary">
+                  <button ng-click="ShowTrackingCode(current_organization, project)" class="btn btn-primary">
                     <i class="fa fa-code"></i>Tracking Codes</button>
                 </td>
               </tr>
-              {% endraw %}
             </tbody>
           </table>
         </div>
       </section>
     </div>
+    <div class="col-md-2">
+      <div class="btn-group">
+        <button class="btn btn-danger btn-lg" data-toggle="dropdown" data-original-title="" title="">
+          {{ current_organization.login }} <i class="icon-caret-down"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li data-value="{{ user_info.user.login }}">
+            <a href="" ng-click="ChooseOrganization(user_info.user)">{{ user_info.user.login }}</a>
+          </li>
+          <li data-value="{{ organization.login }}"
+              ng-repeat="organization in user_info.user.organizations">
+            <a href="" ng-click="ChooseOrganization(organization)">{{ organization.login }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
+{% endraw %}

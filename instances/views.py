@@ -95,11 +95,11 @@ def index():
     return render_template('landing.html')
 
 
-
 @mod.route("/logout")
 def logout():
     session.pop('github_user_data', '')
     return redirect('/')
+
 
 @mod.route("/account")
 @requires_login
@@ -150,11 +150,68 @@ def ajax_user_info():
 
     return json_response({
         'user': session['github_user_data'],
+        'organization': session['github_user_data'],
         'tracked_repositories': tracked_repositories,
         'repositories': repositories,
         'repositories_by_name': repositories_by_name,
     })
 
+@mod.route("/bin/<owner>/repositories.json")
+@requires_login
+def ajax_repo_list(owner):
+    api = GithubUser.from_token(session['github_token'])
+    key = KeyRing.for_user_project_name_set(owner)
+
+    organization = api.get_organization(owner)
+    repositories = api.get_repositories(owner)
+    repositories_by_name = dict([(r['full_name'], r) for r in repositories])
+
+    redis = Redis()
+    tracked_names = redis.smembers(key)
+    tracked_repositories = [repositories_by_name[name] for name in tracked_names]
+
+    return json_response({
+        'user': session['github_user_data'],
+        'organization': organization,
+        'tracked_repositories': tracked_repositories,
+        'repositories': repositories,
+        'repositories_by_name': repositories_by_name,
+    })
+
+
+@mod.route("/bin/<owner>/repositories.json")
+@requires_login
+def ajax_repo_list(owner):
+    api = GithubUser.from_token(session['github_token'])
+    key = KeyRing.for_user_project_name_set(owner)
+
+    organization = api.get_organization(owner)
+    repositories = api.get_repositories(owner)
+    repositories_by_name = dict([(r['full_name'], r) for r in repositories])
+
+    redis = Redis()
+    tracked_names = redis.smembers(key)
+    tracked_repositories = [repositories_by_name[name] for name in tracked_names]
+
+    return json_response({
+        'user': session['github_user_data'],
+        'organization': organization,
+        'tracked_repositories': tracked_repositories,
+        'repositories': repositories,
+        'repositories_by_name': repositories_by_name,
+    })
+
+@mod.route("/bin/<owner>/<name>/tracking_codes.json")
+@requires_login
+def tracking_code_modal(owner, name):
+    api = GithubEndpoint(session['github_token'], public=True)
+
+    repository_fetcher = GithubRepository(api)
+    repository = repository_fetcher.get(owner, name)
+
+    return json_response({
+        'modal_html': render_template('dashboard/tracking-modal.html', repository=repository, username=owner),
+    })
 
 
 @mod.route("/thank-you")
@@ -369,4 +426,5 @@ def github_callback(token):
 
     g.user = User.get_or_create_from_github_user(github_user_data)
     session['github_user_data'] = github_user_data
+
     return redirect(next_url)

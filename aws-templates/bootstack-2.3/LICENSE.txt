@@ -1,0 +1,36 @@
+Usage Licenses
+==============
+
+Use of an item is bound by the license you purchase. A license grants you a non-exclusive and non-transferrable right to use and incorporate the item in your personal or commercial projects. There are several licenses available:
+
+
+Single Application License
+--------------------------
+1. Your use of the item is restricted to a single installation.
+2. You may use the item in work which you are creating for your own purposes or for your client.
+3. You must not incorporate the item in a work which is created for redistribution or resale by you or your client.
+4. The item may not be redistributed or resold.
+5. If the item contains licensed components, those components must only be used within the item and you must not extract and use them on a stand-alone basis.
+6. If the item was created using materials which are the subject of a GNU General Public License (GPL), your use of the item is subject to the terms of the GPL in place of the foregoing conditions (to the extent the GPL applies).
+
+
+Multiple Applications License
+-----------------------------
+1. Your use of the item may extend to multiple installations.
+2. You may use the item in work which you are creating for your own purposes or for your clients.
+3. You must not incorporate the item in a work which is created for redistribution or resale by you or your clients.
+4. The item may not be redistributed or resold.
+5. If the item contains licensed components, those components must only be used within the item and you must not extract and use them on a stand-alone basis.
+6. If the item was created using materials which are the subject of a GNU General Public License (GPL), your use of the item is subject to the terms of the GPL in place of the foregoing conditions (to the extent the GPL applies).
+
+
+Extended License
+----------------
+1. This license must be purchased if you intend to license, sublicense, redistribute, or resell the final product.
+2. Your use of the item may extend to multiple installations.
+3. You may use the item in work which you are creating for your own purposes or for your clients.
+4. You may license, sublicense, redistribute, or resell the item in the following circumstances:
+    1. the item is incorporated into a larger work you have created; or
+    2. if you modify the item and resell the end product.
+5. If the item contains licensed components, those components must only be used within the item and you must not extract and use them on a stand-alone basis.
+6. If the item was created using materials which are the subject of a GNU General Public License (GPL), your use of the item is subject to the terms of the GPL in place of the foregoing conditions (to the extent the GPL applies).
